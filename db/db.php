@@ -140,7 +140,7 @@ class DatabaseManager {
             $statement = $this->db->prepare("SELECT * FROM nbOccurences_levelVariation WHERE chaotic_system_id = :id");
             $statement->bindParam(":id", $systemId, PDO::PARAM_STR);
         } else {
-            $statement = $this->db->prepare("SELECT * FROM nbOccurrences_level");
+            $statement = $this->db->prepare("SELECT * FROM nbOccurences_levelVariation");
         }
         $statement->setFetchMode(PDO::FETCH_ASSOC);
         $results = $statement->execute();

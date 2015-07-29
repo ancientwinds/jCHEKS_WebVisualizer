@@ -14,15 +14,12 @@
             case "agentLevels":
                 echo json_encode($db->getEvolutionAgentLevelResults()); 
                 break;
-            case "occurenceLevel":
-                echo json_encode($db->getOccurenceLevel($system));
-                break;
             case "levelsName":
                 echo json_encode($db->getSystemsNamesForLevel());
-                break;
-            case "levelsVariationName":
-                echo json_encode($db->getSystemsNamesForLevelVariation());
-                break;
+                break; 
+            case "occurenceLevel":
+                echo json_encode($db->getOccurenceLevel($system));
+                break;                       
             case "nist1":
                 echo json_encode($db->getNist1ResultsForSystem());
                 break;
@@ -41,12 +38,16 @@
             case "butterfly":
                 echo json_encode($db->getButterFlyResults($system));
                 break;
+            case "levelsVariationName":
+                echo json_encode($db->getSystemsNamesForLevelVariation());
+                break;
             case "occurenceVariation":
                 echo json_encode($db->getOccurenceLevelVariation($system));
                 break;
 
         }
-                
+        echo json_encode($db->getSystemsNamesForLevelVariation());
+        
     }
     getTest($_POST["type"], $_POST["system"]);
 

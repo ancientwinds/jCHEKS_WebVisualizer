@@ -136,7 +136,7 @@ var DataReader_1 = function (callback) {
             type: "POST",
             dataType: 'json',
             async: false,
-            data: "type=butterfly&system=" + systemId,
+            data: "type=occurenceVariation&system=" + systemId,
             success: function(data2) {
                 for(var i = 0; i < data2.length; i++) {
                     formatedObject = {
@@ -149,6 +149,7 @@ var DataReader_1 = function (callback) {
                 }
             }
         });
+        console.log(data.length);
         return data;
     };
 
@@ -373,6 +374,8 @@ var DataReader_1 = function (callback) {
                 }
             }
         });
+        
+        console.log(data.length);
 
         return data;
     };

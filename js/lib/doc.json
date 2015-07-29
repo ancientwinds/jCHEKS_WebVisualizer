@@ -1,0 +1,7 @@
+{
+    "sql.js": "https://github.com/kripken/sql.js",
+    "w2ui.js": "http://w2ui.com/web/get-started",
+    "QUnit.js": "https://qunitjs.com/", 
+    "jquery.js": "http://api.jquery.com/",
+    "d3.js": "https://github.com/mbostock/d3/wiki"
+}

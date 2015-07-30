@@ -24,6 +24,20 @@ var Layout = (function () {
 
     function initW2Layout(callback) {
         var pstyle = 'border: 1px solid #dfdfdf; padding: 5px;';
+        
+        var database = [];
+        $.ajax({
+            url: "../php/getDatabaseNames.php",
+            type: "POST",
+            dataType: 'json',
+            async: false,
+            data: "type=levelsVariationName",
+            success: function(data2) {
+                for(var i = 0; i < data2.length; i++) {
+                    database.push(data2[i]);
+                }
+            }
+        });
         $("body").w2layout({
             name: 'layout',
             panels: [
@@ -52,6 +66,11 @@ var Layout = (function () {
                                 caption: 'Load',
                                 onClick: callback
                             },
+                            { type: 'menu',   id: 'item2', caption: 'Database', img: 'icon-folder', items: [
+                                    { text: 'Item 1', icon: 'icon-page' }, 
+                                    { text: 'Item 2', icon: 'icon-page' }, 
+                                    { text: 'Item 3', value: 'Item Three', icon: 'icon-page' }
+                            ]}
                         ]
                     }
                 },

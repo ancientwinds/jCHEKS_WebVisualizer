@@ -9,7 +9,7 @@ var DataReader_1 = function (callback) {
         var formatedObject;
 
         $.ajax({
-            url: "../getter.php",
+            url: "../php/getter.php",
             type: "POST",
             dataType: 'json',
             async: false,
@@ -50,7 +50,7 @@ var DataReader_1 = function (callback) {
         var formatedObject;
 
         $.ajax({
-            url: "../getter.php",
+            url: "../php/getter.php",
             type: "POST",
             dataType: 'json',
             async: false,
@@ -89,7 +89,7 @@ var DataReader_1 = function (callback) {
         var formatedObject;
 
         $.ajax({
-            url: "../getter.php",
+            url: "../php/getter.php",
             type: "POST",
             dataType: 'json',
             async: false,
@@ -132,7 +132,7 @@ var DataReader_1 = function (callback) {
         var formatedObject;
 
         $.ajax({
-            url: "../getter.php",
+            url: "../php/getter.php",
             type: "POST",
             dataType: 'json',
             async: false,
@@ -149,7 +149,7 @@ var DataReader_1 = function (callback) {
                 }
             }
         });
-        console.log(data.length);
+
         return data;
     };
 
@@ -158,7 +158,7 @@ var DataReader_1 = function (callback) {
         var formatedObject;
 
         $.ajax({
-            url: "../getter.php",
+            url: "../php/getter.php",
             type: "POST",
             dataType: 'json',
             async: false,
@@ -216,7 +216,7 @@ var DataReader_1 = function (callback) {
         var formatedObject;
 
         $.ajax({
-            url: "../getter.php",
+            url: "../php/getter.php",
             type: "POST",
             dataType: 'json',
             async: false,
@@ -242,7 +242,7 @@ var DataReader_1 = function (callback) {
         var formatedObject;
 
         $.ajax({
-            url: "../getter.php",
+            url: "../php/getter.php",
             type: "POST",
             dataType: 'json',
             async: false,
@@ -268,7 +268,7 @@ var DataReader_1 = function (callback) {
         var formatedObject;
 
         $.ajax({
-            url: "../getter.php",
+            url: "../php/getter.php",
             type: "POST",
             dataType: 'json',
             async: false,
@@ -294,7 +294,7 @@ var DataReader_1 = function (callback) {
         var formatedObject;
 
         $.ajax({
-            url: "../getter.php",
+            url: "../php/getter.php",
             type: "POST",
             dataType: 'json',
             async: false,
@@ -325,7 +325,7 @@ var DataReader_1 = function (callback) {
         var data = [];
 
         $.ajax({
-            url: "../getter.php",
+            url: "../php/getter.php",
             type: "POST",
             dataType: 'json',
             async: false,
@@ -344,7 +344,7 @@ var DataReader_1 = function (callback) {
         var data = [];
 
         $.ajax({
-            url: "../getter.php",
+            url: "../php/getter.php",
             type: "POST",
             dataType: 'json',
             async: false,
@@ -363,7 +363,7 @@ var DataReader_1 = function (callback) {
         var data = [];
 
         $.ajax({
-            url: "../getter.php",
+            url: "../php/getter.php",
             type: "POST",
             dataType: 'json',
             async: false,
@@ -373,9 +373,7 @@ var DataReader_1 = function (callback) {
                     data.push(data2[i].chaotic_system_id);
                 }
             }
-        });
-        
-        console.log(data.length);
+        });        
 
         return data;
     };

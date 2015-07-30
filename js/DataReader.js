@@ -14,7 +14,7 @@ var DataReader = function (databaseFile, callback) {
             rowObject = stmt.getAsObject();
             formatedObject = {
                 systemId: rowObject.chaotic_system_id,
-                x: rowObject.evolution_count,
+                x: rowObject.evolution_count
 
             };
             data.push(formatedObject);
@@ -50,7 +50,7 @@ var DataReader = function (databaseFile, callback) {
             rowObject = stmt.getAsObject();
             formatedObject = {
                 systemId: rowObject.chaotic_system_id,
-                x: rowObject.evolution_count,
+                x: rowObject.evolution_count
 
             };
             data.push(formatedObject);
@@ -114,7 +114,7 @@ var DataReader = function (databaseFile, callback) {
 
     self.getVariationOccurences = function (systemId) {
         var data = [];
-        var stmt = database.prepare("SELECT * FROM nbOccurences_levelVariation WHERE chaotic_system_id='" + systemId + "';");
+        var stmt = database.prepare("SELECT * FROM nbOccurrences_levelVariation WHERE chaotic_system_id='" + systemId + "';");
         var formatedObject;
         var rowObject;
         while (stmt.step()) {
@@ -199,7 +199,7 @@ var DataReader = function (databaseFile, callback) {
                 color: rowObject.p_value
             };
             data.push(formatedObject);
-            y++
+            y++;
         }
         stmt.free();
         console.log(data);
@@ -221,7 +221,7 @@ var DataReader = function (databaseFile, callback) {
                 color: rowObject.p_value
             };
             data.push(formatedObject);
-            y++
+            y++;
         }
         stmt.free();
         console.log(data);
@@ -286,7 +286,7 @@ var DataReader = function (databaseFile, callback) {
         }
         stmt.free();
         return data;
-    }
+    };
     
     self.getSystemNamesForLevel = function () {
         var data = [];
@@ -296,25 +296,23 @@ var DataReader = function (databaseFile, callback) {
         }
         stmt.free();
         return data;
-    }
+    };
     
     self.getSystemNamesForLevelVariation = function () {
         var data = [];
-        var stmt = database.prepare("SELECT DISTINCT chaotic_system_id FROM nbOccurences_levelVariation ORDER BY chaotic_system_id;");
+        var stmt = database.prepare("SELECT DISTINCT chaotic_system_id FROM nbOccurrences_levelVariation ORDER BY chaotic_system_id;");
         while (stmt.step()) {
             data.push(stmt.getAsObject().chaotic_system_id);
         }
         stmt.free();
         return data;
-    }
+    };
 
     var onReady = function () {
         database = new SQL.Database(new Uint8Array(reader.result));
         callback(self);
-    }
+    };
 
     reader.onload = onReady;
     reader.readAsArrayBuffer(databaseFile);
-
-
 };

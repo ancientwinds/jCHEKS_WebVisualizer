@@ -46,8 +46,7 @@
                 break;
 
         }
-        echo json_encode($db->getSystemsNamesForLevelVariation());
-        
+                
     }
     getTest($_POST["type"], $_POST["system"]);
 

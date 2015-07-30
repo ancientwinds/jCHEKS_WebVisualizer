@@ -3,7 +3,7 @@
 class DatabaseManager {
     var $db = null;
     function __construct() {
-        $this->db = new PDO("sqlite:keys_temp.db");
+        $this->db = new PDO("sqlite:../databases/complete.db");
         
     }
     
@@ -137,10 +137,10 @@ class DatabaseManager {
     
     function getOccurenceLevelVariation($systemId = null) {
         if($systemId) {
-            $statement = $this->db->prepare("SELECT * FROM nbOccurences_levelVariation WHERE chaotic_system_id = :id");
+            $statement = $this->db->prepare("SELECT * FROM nbOccurrences_levelVariation WHERE chaotic_system_id = :id");
             $statement->bindParam(":id", $systemId, PDO::PARAM_STR);
         } else {
-            $statement = $this->db->prepare("SELECT * FROM nbOccurences_levelVariation");
+            $statement = $this->db->prepare("SELECT * FROM nbOccurrences_levelVariation");
         }
         $statement->setFetchMode(PDO::FETCH_ASSOC);
         $results = $statement->execute();
@@ -152,7 +152,7 @@ class DatabaseManager {
     }
     
     function getSystemsNamesForLevel() {
-        $statement = $this->db->prepare("SELECT DISTINCT chaotic_system_id FROM nbOccurrences_level  ORDER BY chaotic_system_id;");
+        $statement = $this->db->prepare("SELECT DISTINCT(chaotic_system_id) FROM nbOccurrences_level");
         $statement->setFetchMode(PDO::FETCH_ASSOC);
         $results = $statement->execute();
         
@@ -163,7 +163,7 @@ class DatabaseManager {
     }
     
     function getSystemsNamesForLevelVariation() {
-        $statement = $this->db->prepare("SELECT DISTINCT chaotic_system_id FROM nbOccurences_levelVariation ORDER BY chaotic_system_id;");
+        $statement = $this->db->prepare("SELECT DISTINCT(chaotic_system_id) FROM nbOccurrences_levelVariation ORDER BY chaotic_system_id");
         $statement->setFetchMode(PDO::FETCH_ASSOC);
         $results = $statement->execute();
         

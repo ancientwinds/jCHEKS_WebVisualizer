@@ -36,7 +36,7 @@ var Layout = (function () {
                     toolbar: {
                         name: 'toolbar',
                         items: [
-                            {
+                            /*{
                                 id: "fileLabel",
                                 type: 'html',
                                 caption: 'File: ',
@@ -45,7 +45,7 @@ var Layout = (function () {
                                 type: 'html',
                                 id: 'file',
                                 html: "<input type='file' id='file'>"
-                            },
+                            },*/
                             {
                                 type: 'button',
                                 id: 'loadButton',

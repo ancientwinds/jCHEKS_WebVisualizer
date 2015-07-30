@@ -24,20 +24,7 @@ var Layout = (function () {
 
     function initW2Layout(callback) {
         var pstyle = 'border: 1px solid #dfdfdf; padding: 5px;';
-        
-        var database = [];
-        $.ajax({
-            url: "../php/getDatabaseNames.php",
-            type: "POST",
-            dataType: 'json',
-            async: false,
-            data: "type=levelsVariationName",
-            success: function(data2) {
-                for(var i = 0; i < data2.length; i++) {
-                    database.push(data2[i]);
-                }
-            }
-        });
+         
         $("body").w2layout({
             name: 'layout',
             panels: [
@@ -57,7 +44,6 @@ var Layout = (function () {
                             {
                                 type: 'html',
                                 id: 'file',
-
                                 html: "<input type='file' id='file'>"
                             },
                             {
@@ -66,11 +52,11 @@ var Layout = (function () {
                                 caption: 'Load',
                                 onClick: callback
                             },
-                            { type: 'menu',   id: 'item2', caption: 'Database', img: 'icon-folder', items: [
-                                    { text: 'Item 1', icon: 'icon-page' }, 
-                                    { text: 'Item 2', icon: 'icon-page' }, 
-                                    { text: 'Item 3', value: 'Item Three', icon: 'icon-page' }
-                            ]}
+                            {
+                                type: 'html',
+                                id: 'file',
+                                html: "<select id='dropdown'></select>"
+                            }
                         ]
                     }
                 },
@@ -92,6 +78,19 @@ var Layout = (function () {
                 }
                 ]
 
+        });
+        
+        $.ajax({
+            url: "../php/getDatabaseNames.php",
+            type: "POST",
+            dataType: 'json',
+            async: false,
+            data: "type=levelsVariationName",
+            success: function(data2) {
+                for(var i = 0; i < data2.length; i++) {
+                    $("#dropdown").append($("<option value='" + data2[i] + "'>" + data2[i] + "</option>"))
+                }
+            }
         });
 
         $('#file').w2field('file', {
@@ -121,11 +120,11 @@ var Layout = (function () {
             id: id,
             caption: caption
         });
-    }
+    };
 
     function addToList(id) {
         frameIds.push(id);
-    }
+    };
 
     var addTab = function (id, caption) {
         addTabSvg(id);
@@ -133,20 +132,25 @@ var Layout = (function () {
         addTabElement(id, caption);
         addToList(id);
         switchTabs(id)
-    }
+    };
 
     var setSidebarContent = function (id, contents) {
         for (var i = 0; i < contents.length; i++) {
             $("#" + id + "Sidebar").append(contents[i]);
         }
-    }
+    };
 
     var show = function () {
         $("body").fadeIn(1000);
-    }
+    };
+    
     var getSelectedFile = function () {
         return $("#file").data('selected')[0].file;
-    }
+    };
+    
+    var getSelectedDatabase = function () {
+        return document.getElementById('dropdown').options[document.getElementById('dropdown').selectedIndex].text;
+    };
 
     var createNavigationButtons = function (onPreviousClick, onNextClick) {
         var previousButton = $("<button>").text("Previous").click(onPreviousClick)
@@ -165,7 +169,8 @@ var Layout = (function () {
         getContainerWidth: getContainerWidth,
         getContainerHeight: getContainerHeight,
         show: show,
-        getSelectedFile: getSelectedFile,
+        getSelectedFile: getSelectedFile, 
+        getSelectedDatabase: getSelectedDatabase,
         createNavigationButtons: createNavigationButtons,
         createScaleInput: createScaleInput
     };

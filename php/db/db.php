@@ -2,9 +2,8 @@
 
 class DatabaseManager {
     var $db = null;
-    function __construct() {
-        $this->db = new PDO("sqlite:../databases/complete.db");
-        
+    function __construct($name) {
+        $this->db = new PDO("sqlite:databases/" . $name);        
     }
     
     function getNist1ResultsForSystem($systemId = null) {

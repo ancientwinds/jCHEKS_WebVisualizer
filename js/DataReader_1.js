@@ -1,6 +1,4 @@
-var DataReader_1 = function (callback) {
-    //var reader = new FileReader();
-    var database;
+var DataReader_1 = function (databaseName, callback) {
 
     var self = {};
 
@@ -13,7 +11,7 @@ var DataReader_1 = function (callback) {
             type: "POST",
             dataType: 'json',
             async: false,
-            data: "type=keyBits",
+            data: "type=keyBits&name=" + databaseName,
             success: function(data2) {
                 for(var i = 0; i < data2.length; i++) {
                     formatedObject = {
@@ -54,7 +52,7 @@ var DataReader_1 = function (callback) {
             type: "POST",
             dataType: 'json',
             async: false,
-            data: "type=agentLevels",
+            data: "type=agentLevels&name=" + databaseName,
             success: function(data2) {
                 for(var i = 0; i < data2.length; i++) {
                     formatedObject = {
@@ -93,7 +91,7 @@ var DataReader_1 = function (callback) {
             type: "POST",
             dataType: 'json',
             async: false,
-            data: "type=occurenceLevel&system=" + systemId,
+            data: "type=occurenceLevel&system=" + systemId + "&name=" + databaseName,
             success: function(data2) {
                 for(var i = 0; i < data2.length; i++) {
                     formatedObject = {
@@ -136,7 +134,7 @@ var DataReader_1 = function (callback) {
             type: "POST",
             dataType: 'json',
             async: false,
-            data: "type=occurenceVariation&system=" + systemId,
+            data: "type=occurenceVariation&system=" + systemId + "&name=" + databaseName,
             success: function(data2) {
                 for(var i = 0; i < data2.length; i++) {
                     formatedObject = {
@@ -162,7 +160,7 @@ var DataReader_1 = function (callback) {
             type: "POST",
             dataType: 'json',
             async: false,
-            data: "type=butterfly&system=" + systemId,
+            data: "type=butterfly&system=" + systemId + "&name=" + databaseName,
             success: function(data2) {
                 for(var i = 0; i < data2.length; i++) {
                     formatedObject = {
@@ -220,7 +218,7 @@ var DataReader_1 = function (callback) {
             type: "POST",
             dataType: 'json',
             async: false,
-            data: "type=nist1",
+            data: "type=nist1&name=" + databaseName,
             success: function(data2) {
                 for(var i = 0; i < data2.length; i++) {
                     formatedObject = {
@@ -246,7 +244,7 @@ var DataReader_1 = function (callback) {
             type: "POST",
             dataType: 'json',
             async: false,
-            data: "type=nist2",
+            data: "type=nist2&name=" + databaseName,
             success: function(data2) {
                 for(var i = 0; i < data2.length; i++) {
                     formatedObject = {
@@ -272,7 +270,7 @@ var DataReader_1 = function (callback) {
             type: "POST",
             dataType: 'json',
             async: false,
-            data: "type=nist3",
+            data: "type=nist3&name=" + databaseName,
             success: function(data2) {
                 for(var i = 0; i < data2.length; i++) {
                     formatedObject = {
@@ -298,7 +296,7 @@ var DataReader_1 = function (callback) {
             type: "POST",
             dataType: 'json',
             async: false,
-            data: "type=nist4",
+            data: "type=nist4&name=" + databaseName,
             success: function(data2) {
                 for(var i = 0; i < data2.length; i++) {
                     formatedObject = {
@@ -329,7 +327,7 @@ var DataReader_1 = function (callback) {
             type: "POST",
             dataType: 'json',
             async: false,
-            data: "type=butterflyName",
+            data: "type=butterflyName&name=" + databaseName,
             success: function(data2) {
                 for(var i = 0; i < data2.length; i++) {
                     data.push(data2[i].chaotic_system_id);
@@ -348,7 +346,7 @@ var DataReader_1 = function (callback) {
             type: "POST",
             dataType: 'json',
             async: false,
-            data: "type=levelsName",
+            data: "type=levelsName&name=" + databaseName,
             success: function(data2) {
                 for(var i = 0; i < data2.length; i++) {
                     data.push(data2[i].chaotic_system_id);
@@ -367,7 +365,7 @@ var DataReader_1 = function (callback) {
             type: "POST",
             dataType: 'json',
             async: false,
-            data: "type=levelsVariationName",
+            data: "type=levelsVariationName&name=" + databaseName,
             success: function(data2) {
                 for(var i = 0; i < data2.length; i++) {
                     data.push(data2[i].chaotic_system_id);

@@ -11,7 +11,7 @@ $().ready(function () {
 
     var onFileSelected = function () {
         //var dataReader = DataReader(Layout.getSelectedFile(), onDatabaseLoaded);
-        var dataReader = DataReader_1(onDatabaseLoaded);
+        var dataReader = DataReader_1(Layout.getSelectedDatabase(), onDatabaseLoaded);
     };
     Layout.init(onFileSelected);
     Layout.show();

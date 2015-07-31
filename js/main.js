@@ -4,6 +4,7 @@ $().ready(function () {
 
     var onFileSelected = function () {
         var dataReader = DataReader();
+        new DistanceEvolution(dataReader);
         new nbOccurrences_LevelAgent(dataReader);
         new nbOccurrences_LevelVariation(dataReader);
         new ButterflyEffect(dataReader);

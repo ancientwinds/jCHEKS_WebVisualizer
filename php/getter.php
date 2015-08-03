@@ -1,8 +1,8 @@
 <?php
     include("db/db.php"); 
 
-    function getTest($type, $system) {
-        $db = new DatabaseManager();
+    function getData($type, $system, $databaseName) {
+        $db = new DatabaseManager($databaseName);
         if(!$db) {
            echo $db->lastErrorMsg();
         }
@@ -48,5 +48,5 @@
         }
                 
     }
-    getTest($_POST["type"], $_POST["system"]);
-
+    
+    getData($_POST["type"], $_POST["system"], $_POST["name"]); 

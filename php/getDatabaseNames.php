@@ -2,7 +2,7 @@
 
 $names = [];
 
-if ($handle = opendir('../databases/')) {
+if ($handle = opendir('databases/')) {
 
     while (false !== ($entry = readdir($handle))) {
         if ($entry != "." && $entry != "..") {

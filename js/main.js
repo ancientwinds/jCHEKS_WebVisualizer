@@ -1,9 +1,6 @@
 $().ready(function () {
-
-
-
     var onFileSelected = function () {
-        var dataReader = DataReader();
+        var dataReader = DataReader(Layout.getSelectedDatabase());
         new nbOccurrences_LevelAgent(dataReader);
         new nbOccurrences_LevelVariation(dataReader);
         new ButterflyEffect(dataReader);

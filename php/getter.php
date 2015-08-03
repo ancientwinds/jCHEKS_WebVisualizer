@@ -1,6 +1,6 @@
 <?php
     include("db/db.php"); 
-
+    header('Content-type: application/json');
     function getData($type, $system, $databaseName) {
         $db = new DatabaseManager($databaseName);
         if(!$db) {
@@ -44,9 +44,7 @@
             case "occurenceVariation":
                 echo json_encode($db->getOccurenceLevelVariation($system));
                 break;
-
         }
-                
     }
     
-    getData($_POST["type"], $_POST["system"], $_POST["name"]); 
+    getData($_POST["type"], $_POST["system"], $_POST["name"]);

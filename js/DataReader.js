@@ -1,25 +1,29 @@
-var DataReader = function (databaseFile, callback) {
-    var reader = new FileReader();
+var DataReader = function (callback) {
+ //var reader = new FileReader();
     var database;
-    var ready = false;
 
     var self = {};
 
     self.getAllKeybits = function () {
         var data = [];
-        var stmt = database.prepare("SELECT * FROM nbEvolutions_AllKeyBits;");
         var formatedObject;
-        var rowObject;
-        while (stmt.step()) {
-            rowObject = stmt.getAsObject();
-            formatedObject = {
-                systemId: rowObject.chaotic_system_id,
-                x: rowObject.evolution_count
 
-            };
-            data.push(formatedObject);
-        }
-        stmt.free();
+        $.ajax({
+            url: "../php/getter.php",
+            type: "POST",
+            dataType: 'json',
+            async: false,
+            data: "type=keyBits",
+            success: function(data2) {
+                for(var i = 0; i < data2.length; i++) {
+                    formatedObject = {
+                      systemId: data2[i].chaotic_system_id,
+                      x: parseInt(data2[i].evolution_count)
+                    };
+                    data.push(formatedObject);
+                }
+            }
+        });
         return data;
     };
 
@@ -33,7 +37,6 @@ var DataReader = function (databaseFile, callback) {
             formatedObject = {
                 systemId: rowObject.chaotic_system_id,
                 x: rowObject.evolution_count,
-
             };
             data.push(formatedObject);
         }
@@ -43,19 +46,24 @@ var DataReader = function (databaseFile, callback) {
 
     self.getAllLevelAgent = function () {
         var data = [];
-        var stmt = database.prepare("SELECT * FROM nbEvolutions_allAgentLevels;");
         var formatedObject;
-        var rowObject;
-        while (stmt.step()) {
-            rowObject = stmt.getAsObject();
-            formatedObject = {
-                systemId: rowObject.chaotic_system_id,
-                x: rowObject.evolution_count
 
-            };
-            data.push(formatedObject);
-        }
-        stmt.free();
+        $.ajax({
+            url: "../php/getter.php",
+            type: "POST",
+            dataType: 'json',
+            async: false,
+            data: "type=agentLevels",
+            success: function(data2) {
+                for(var i = 0; i < data2.length; i++) {
+                    formatedObject = {
+                      systemId: data2[i].chaotic_system_id,
+                      x: parseInt(data2[i].evolution_count)
+                    };
+                    data.push(formatedObject);
+                }
+            }
+        });
         return data;
     };
 
@@ -77,21 +85,27 @@ var DataReader = function (databaseFile, callback) {
 
     self.getLevelOccurences = function (systemId) {
         var data = [];
-        var stmt = database.prepare("SELECT * FROM nbOccurrences_level WHERE chaotic_system_id='" + systemId + "';");
         var formatedObject;
-        var rowObject;
-        while (stmt.step()) {
-            rowObject = stmt.getAsObject();
-            formatedObject = {
-                systemId: rowObject.chaotic_system_id,
-                y: rowObject.agent_id,
-                x: rowObject.variation,
-                color: rowObject.occurence_count
 
-            };
-            data.push(formatedObject);
-        }
-        stmt.free();
+        $.ajax({
+            url: "../php/getter.php",
+            type: "POST",
+            dataType: 'json',
+            async: false,
+            data: "type=occurenceLevel&system=" + systemId,
+            success: function(data2) {
+                for(var i = 0; i < data2.length; i++) {
+                    formatedObject = {
+                      systemId: data2[i].chaotic_system_id,
+                      y: parseInt(data2[i].agent_id),
+                      x: parseInt(data2[i].variation),
+                      color: parseInt(data2[i].occurence_count)
+
+                    };
+                    data.push(formatedObject);
+                }
+            }
+        });
         return data;
     };
 
@@ -114,41 +128,53 @@ var DataReader = function (databaseFile, callback) {
 
     self.getVariationOccurences = function (systemId) {
         var data = [];
-        var stmt = database.prepare("SELECT * FROM nbOccurrences_levelVariation WHERE chaotic_system_id='" + systemId + "';");
         var formatedObject;
-        var rowObject;
-        while (stmt.step()) {
-            rowObject = stmt.getAsObject();
-            formatedObject = {
-                //systemId: rowObject.chaotic_system_id,
-                y: rowObject.agent_id,
-                x: rowObject.variation,
-                color: rowObject.occurence_count
 
-            };
-            data.push(formatedObject);
-        }
-        stmt.free();
+        $.ajax({
+            url: "../php/getter.php",
+            type: "POST",
+            dataType: 'json',
+            async: false,
+            data: "type=occurenceVariation&system=" + systemId,
+            success: function(data2) {
+                for(var i = 0; i < data2.length; i++) {
+                    formatedObject = {
+                      y: parseInt(data2[i].agent_id),
+                      x: parseInt(data2[i].variation),
+                      color: parseInt(data2[i].occurence_count)
+
+                    };
+                    data.push(formatedObject);
+                }
+            }
+        });
+
         return data;
     };
 
     self.getButterflyEffect = function (systemId) {
         var data = [];
-        var stmt = database.prepare("SELECT * FROM butterfly_effect WHERE chaotic_system_id='" + systemId + "' AND evolution_count < 150;");
         var formatedObject;
-        var rowObject;
-        while (stmt.step()) {
-            rowObject = stmt.getAsObject();
-            formatedObject = {
-                systemId: rowObject.chaotic_system_id,
-                y: rowObject.clone_id,
-                x: rowObject.evolution_count,
-                color: rowObject.distance
 
-            };
-            data.push(formatedObject);
-        }
-        stmt.free();
+        $.ajax({
+            url: "../php/getter.php",
+            type: "POST",
+            dataType: 'json',
+            async: false,
+            data: "type=butterfly&system=" + systemId,
+            success: function(data2) {
+                for(var i = 0; i < data2.length; i++) {
+                    formatedObject = {
+                      systemId: data2[i].chaotic_system_id,
+                      y: parseInt(data2[i].clone_id),
+                      x: parseInt(data2[i].evolution_count),
+                      color: parseInt(data2[i].distance)
+
+                    };
+                    data.push(formatedObject);
+                }
+            }
+        });
         return data;
     };
 
@@ -167,7 +193,7 @@ var DataReader = function (databaseFile, callback) {
         }
         return data;
     };
-    
+
     self.getOverallLevelVariation = function () {
         console.error("'getOverallButterfly' not implemented, random values will be returned.");
         var data = [];
@@ -186,89 +212,105 @@ var DataReader = function (databaseFile, callback) {
 
     function getNist1() {
         var data = [];
-        var stmt = database.prepare("SELECT * FROM FrequencyMonobit_NIST_1;");
         var formatedObject;
-        var rowObject;
-        var y = 0;
-        while (stmt.step()) {
-            rowObject = stmt.getAsObject();
-            formatedObject = {
-                systemId: rowObject.chaotic_system_id,
-                y: y,
-                x: 1,
-                color: rowObject.p_value
-            };
-            data.push(formatedObject);
-            y++;
-        }
-        stmt.free();
-        console.log(data);
+
+        $.ajax({
+            url: "../php/getter.php",
+            type: "POST",
+            dataType: 'json',
+            async: false,
+            data: "type=nist1",
+            success: function(data2) {
+                for(var i = 0; i < data2.length; i++) {
+                    formatedObject = {
+                      systemId: data2[i].chaotic_system_id,
+                      y: i,
+                      x: 1,
+                      color: parseFloat(data2[i].p_value)
+
+                    };
+                    data.push(formatedObject);
+                }
+            }
+        });
         return data;
     }
 
     function getNist2() {
         var data = [];
-        var stmt = database.prepare("SELECT * FROM FrequencyBlock_NIST_2;");
         var formatedObject;
-        var rowObject;
-        var y = 0;
-        while (stmt.step()) {
-            rowObject = stmt.getAsObject();
-            formatedObject = {
-                systemId: rowObject.chaotic_system_id,
-                x: 2,
-                y: y,
-                color: rowObject.p_value
-            };
-            data.push(formatedObject);
-            y++;
-        }
-        stmt.free();
-        console.log(data);
+
+        $.ajax({
+            url: "../php/getter.php",
+            type: "POST",
+            dataType: 'json',
+            async: false,
+            data: "type=nist2",
+            success: function(data2) {
+                for(var i = 0; i < data2.length; i++) {
+                    formatedObject = {
+                      systemId: data2[i].chaotic_system_id,
+                      y: i,
+                      x: 2,
+                      color: parseFloat(data2[i].p_value)
+
+                    };
+                    data.push(formatedObject);
+                }
+            }
+        });
         return data;
     }
 
     function getNist3() {
         var data = [];
-        var stmt = database.prepare("SELECT * FROM Runs_NIST_3;");
         var formatedObject;
-        var rowObject;
-        var y = 0;
-        while (stmt.step()) {
-            rowObject = stmt.getAsObject();
-            formatedObject = {
-                systemId: rowObject.chaotic_system_id,
-                y: y,
-                x: 3,
-                color: rowObject.p_value
-            };
-            data.push(formatedObject);
-            y++;
-        }
-        stmt.free();
-        console.log(data);
+
+        $.ajax({
+            url: "../php/getter.php",
+            type: "POST",
+            dataType: 'json',
+            async: false,
+            data: "type=nist3",
+            success: function(data2) {
+                for(var i = 0; i < data2.length; i++) {
+                    formatedObject = {
+                      systemId: data2[i].chaotic_system_id,
+                      y: i,
+                      x: 3,
+                      color: parseFloat(data2[i].p_value)
+
+                    };
+                    data.push(formatedObject);
+                }
+            }
+        });
         return data;
     }
 
     function getNist4() {
         var data = [];
-        var stmt = database.prepare("SELECT * FROM LongestRun_NIST_4;");
         var formatedObject;
-        var rowObject;
-        var y = 0;
-        while (stmt.step()) {
-            rowObject = stmt.getAsObject();
-            formatedObject = {
-                systemId: rowObject.chaotic_system_id,
-                y: y,
-                x: 4,
-                color: rowObject.p_value
-            };
-            data.push(formatedObject);
-            y++;
-        }
-        stmt.free();
-        console.log(data);
+
+        $.ajax({
+            url: "../php/getter.php",
+            type: "POST",
+            dataType: 'json',
+            async: false,
+            data: "type=nist4",
+            success: function(data2) {
+                for(var i = 0; i < data2.length; i++) {
+                    formatedObject = {
+                      systemId: data2[i].chaotic_system_id,
+                      y: i,
+                      x: 4,
+                      color: parseFloat(data2[i].p_value)
+
+                    };
+                    data.push(formatedObject);
+                }
+            }
+        });
         return data;
     }
 
@@ -280,39 +322,61 @@ var DataReader = function (databaseFile, callback) {
 
     self.getSystemNamesForButterflyEffect = function () {
         var data = [];
-        var stmt = database.prepare("SELECT DISTINCT chaotic_system_id FROM butterfly_effect ORDER BY chaotic_system_id;");
-        while (stmt.step()) {
-            data.push(stmt.getAsObject().chaotic_system_id);
-        }
-        stmt.free();
+
+        $.ajax({
+            url: "../php/getter.php",
+            type: "POST",
+            dataType: 'json',
+            async: false,
+            data: "type=butterflyName",
+            success: function(data2) {
+                for(var i = 0; i < data2.length; i++) {
+                    data.push(data2[i].chaotic_system_id);
+                }
+            }
+        });
+
         return data;
     };
-    
+
     self.getSystemNamesForLevel = function () {
         var data = [];
-        var stmt = database.prepare("SELECT DISTINCT chaotic_system_id FROM nbOccurrences_level  ORDER BY chaotic_system_id;");
-        while (stmt.step()) {
-            data.push(stmt.getAsObject().chaotic_system_id);
-        }
-        stmt.free();
+
+        $.ajax({
+            url: "../php/getter.php",
+            type: "POST",
+            dataType: 'json',
+            async: false,
+            data: "type=levelsName",
+            success: function(data2) {
+                for(var i = 0; i < data2.length; i++) {
+                    data.push(data2[i].chaotic_system_id);
+                }
+            }
+        });
+
         return data;
     };
-    
+
     self.getSystemNamesForLevelVariation = function () {
         var data = [];
-        var stmt = database.prepare("SELECT DISTINCT chaotic_system_id FROM nbOccurrences_levelVariation ORDER BY chaotic_system_id;");
-        while (stmt.step()) {
-            data.push(stmt.getAsObject().chaotic_system_id);
-        }
-        stmt.free();
+
+        $.ajax({
+            url: "../php/getter.php",
+            type: "POST",
+            dataType: 'json',
+            async: false,
+            data: "type=levelsVariationName",
+            success: function(data2) {
+                for(var i = 0; i < data2.length; i++) {
+                    data.push(data2[i].chaotic_system_id);
+                }
+            }
+        });
+
         return data;
     };
 
-    var onReady = function () {
-        database = new SQL.Database(new Uint8Array(reader.result));
-        callback(self);
-    };
+    return self;
 
-    reader.onload = onReady;
-    reader.readAsArrayBuffer(databaseFile);
 };

@@ -44,7 +44,19 @@
             case "occurenceVariation":
                 echo json_encode($db->getOccurenceLevelVariation($system));
                 break;
+            case "distanceEvolution":
+                echo json_encode($db->getDistanceEvolution($system));
+                break;
+            case "namesForDistanceEvolution":
+                echo json_encode($db->getSystemNamesForDistanceEvolution());
+                break;
         }
     }
-    
-    getData($_POST["type"], $_POST["system"], $_POST["name"]);
+    $type = "";
+    $system = "";
+    $name = "";
+    if(isset($_POST["type"])) $type = $_POST["type"];
+    if(isset($_POST["system"])) $system = $_POST["system"];
+    if(isset($_POST["name"])) $name = $_POST["name"];
+
+    getData($type, $system, $name);

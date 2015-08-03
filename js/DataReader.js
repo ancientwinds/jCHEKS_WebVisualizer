@@ -1,6 +1,5 @@
 var DataReader = function (databaseName) {
     var self = {};
-
     self.getAllKeybits = function () {
         var data = [];
         var formatedObject;
@@ -127,7 +126,6 @@ var DataReader = function (databaseName) {
                 data[y * maxX + x].y = y;
             }
         }
-        console.log(data);
         return data;
     };
 
@@ -172,6 +170,58 @@ var DataReader = function (databaseName) {
                     formatedObject = {
                       systemId: data2[i].chaotic_system_id,
                       y: parseInt(data2[i].clone_id),
+                      x: parseInt(data2[i].evolution_count),
+                      color: parseInt(data2[i].distance)
+
+                    };
+                    data.push(formatedObject);
+                }
+            }
+        });
+        return data;
+    };
+    self.getSystemNamesForDistanceEvolution = function () {
+        var data = [];
+        $.ajax({
+            url: "../php/getter.php",
+            type: "POST",
+            dataType: 'json',
+            async: false,
+            data: "type=namesForDistanceEvolution&name=" + databaseName,
+            success: function(data2) {
+                for(var i = 0; i < data2.length; i++) {
+                    data.push(data2[i].chaotic_system_id);
+                }
+            }
+        });
+        console.log("sys",data);
+        return data;
+    };
+    self.getDistanceEvolution = function () {
+        var data = [];
+        var formatedObject;
+        var systemIds = self.getSystemNamesForDistanceEvolution();
+        for(var i=0; i<systemIds.length; i++){
+            data = data.concat(self.getDistanceEvolutionForASystem(systemIds[i], i));
+        }
+        console.log("received data:", data)
+        return data;
+    };
+
+    self.getDistanceEvolutionForASystem = function (systemId, y) {
+        var data = [];
+        var formatedObject;
+        $.ajax({
+            url: "../php/getter.php",
+            type: "POST",
+            dataType: 'json',
+            async: false,
+            data: "type=distanceEvolution&system=" + systemId + "&name=" + databaseName,
+            success: function(data2) {
+                for(var i = 0; i < data2.length; i++) {
+                    formatedObject = {
+                      systemId: data2[i].chaotic_system_id,
+                      y: y,
                       x: parseInt(data2[i].evolution_count),
                       color: parseInt(data2[i].distance)
 
@@ -321,20 +371,7 @@ var DataReader = function (databaseName) {
 
     self.getNist = function () {
         var data = [];
-
-        $.ajax({
-            url: "../php/getter.php",
-            type: "POST",
-            dataType: 'json',
-            async: false,
-            data: "type=butterflyName&name=" + databaseName,
-            success: function(data2) {
-                for(var i = 0; i < data2.length; i++) {
-                    data.push(data2[i].chaotic_system_id);
-                }
-            }
-        });
-
+        data = data.concat(getNist1().concat(getNist2().concat(getNist3().concat(getNist4()))));
         return data;
     };
 
@@ -371,6 +408,25 @@ var DataReader = function (databaseName) {
                     data.push(data2[i].chaotic_system_id);
                 }
             }
+        });
+
+        return data;
+    };
+
+    self.getSystemNamesForButterflyEffect = function () {
+        var data = [];
+
+        $.ajax({
+            url: "../php/getter.php",
+            type: "POST",
+            dataType: 'json',
+            async: false,
+            data: "type=butterflyName&name=" + databaseName,
+            success: function(data2) {
+                for(var i = 0; i < data2.length; i++) {
+                    data.push(data2[i].chaotic_system_id);
+                }
+            }
         });        
 
         return data;
@@ -378,5 +434,3 @@ var DataReader = function (databaseName) {
 
     return self;
 };
-
-

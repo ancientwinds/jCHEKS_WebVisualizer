@@ -85,7 +85,6 @@ var Layout = (function () {
             type: "POST",
             dataType: 'json',
             async: false,
-            data: "type=levelsVariationName",
             success: function(data2) {
                 for(var i = 0; i < data2.length; i++) {
                     $("#dropdown").append($("<option value='" + data2[i] + "'>" + data2[i] + "</option>"))
@@ -101,11 +100,11 @@ var Layout = (function () {
 
     var getContainerWidth = function () {
         return window.innerWidth - 200;
-    }
+    };
 
     var getContainerHeight = function () {
         return $("#tabs").height();
-    }
+    };
 
     function addTabSvg(id) {
         $("#tabs").append($("<svg id='" + id + "Svg'></svg>"))
@@ -149,7 +148,7 @@ var Layout = (function () {
     };
     
     var getSelectedDatabase = function () {
-        return document.getElementById('dropdown').options[document.getElementById('dropdown').selectedIndex].text;
+        return $( "#dropdown option:selected" ).text();;
     };
 
     var createNavigationButtons = function (onPreviousClick, onNextClick) {

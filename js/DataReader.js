@@ -84,7 +84,7 @@ var DataReader = function (databaseName) {
                     data.push(formatedObject);
                 }
             }
-        }
+        });
         return data;
     };
 

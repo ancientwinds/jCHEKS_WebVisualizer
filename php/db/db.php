@@ -162,7 +162,7 @@ class DatabaseManager {
     }
     
     function getSystemsNamesForLevelVariation() {
-        $statement = $this->db->prepare("SELECT DISTINCT(chaotic_system_id) FROM nbOccurrences_levelVariation ORDER BY chaotic_system_id");
+        $statement = $this->db->prepare("SELECT DISTINCT chaotic_system_id FROM nbOccurrences_levelVariation ORDER BY chaotic_system_id");
         $statement->setFetchMode(PDO::FETCH_ASSOC);
         $results = $statement->execute();
         
@@ -173,7 +173,34 @@ class DatabaseManager {
     }
     
     function getSystemNamesForButterfly() {
-        $statement = $this->db->prepare("SELECT DISTINCT chaotic_system_id FROM butterfly_effect ORDER BY chaotic_system_id;");
+        $statement = $this->db->prepare("SELECT DISTINCT chaotic_system_id FROM butterfly_effect ORDER BY chaotic_system_id");
+        $statement->setFetchMode(PDO::FETCH_ASSOC);
+        $results = $statement->execute();
+
+        if($results) {
+            return $statement->fetchAll();
+        }
+        return null;
+    }
+
+    function getSystemNamesForDistanceEvolution() {
+        $statement = $this->db->prepare("SELECT DISTINCT chaotic_system_id FROM distance_between_evolution ORDER BY chaotic_system_id LIMIT 32");
+        $statement->setFetchMode(PDO::FETCH_ASSOC);
+        $results = $statement->execute();
+
+        if($results) {
+            return $statement->fetchAll();
+        }
+        return null;
+    }
+
+    function getDistanceEvolution($systemId = null){
+        if($systemId) {
+            $statement = $this->db->prepare("SELECT * FROM distance_between_evolution WHERE chaotic_system_id = :id LIMIT 150");
+            $statement->bindParam(":id", $systemId, PDO::PARAM_STR);
+        } else {
+            $statement = $this->db->prepare("SELECT * FROM distance_between_evolution");
+        }
         $statement->setFetchMode(PDO::FETCH_ASSOC);
         $results = $statement->execute();
         

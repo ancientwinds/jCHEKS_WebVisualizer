@@ -67,14 +67,22 @@ var DataReader = function (databaseName) {
     self.getOverallLevelOccurences = function () {
         console.error("'getOverallLevelOccurences' not implemented, random values will be returned.");
         var data = [];
-        var maxY = Math.floor(Math.random() * 200) + 10;
-        var maxX = Math.floor(Math.random() * 200) + 10;
-        for (var y = 0; y < maxY; y++) {
-            for (var x = 0; x < maxX; x++) {
-                data[y * maxX + x] = {};
-                data[y * maxX + x].color = Math.floor(Math.random() * 4000) + 4000;
-                data[y * maxX + x].x = x;
-                data[y * maxX + x].y = y;
+        var formatedObject;
+
+        $.ajax({
+            url: "../php/getter.php",
+            type: "POST",
+            dataType: 'json',
+            async: false,
+            data: "type=agentLevels",
+            success: function(data2) {
+                for(var i = 0; i < data2.length; i++) {
+                    formatedObject = {
+                      systemId: data2[i].chaotic_system_id,
+                      x: parseInt(data2[i].evolution_count)
+                    };
+                    data.push(formatedObject);
+                }
             }
         }
         return data;
@@ -312,12 +320,6 @@ var DataReader = function (databaseName) {
     }
 
     self.getNist = function () {
-        var data = [];
-        data = data.concat(getNist1()).concat(getNist2()).concat(getNist3()).concat(getNist4());
-        return data;
-    };
-
-    self.getSystemNamesForButterflyEffect = function () {
         var data = [];
 
         $.ajax({

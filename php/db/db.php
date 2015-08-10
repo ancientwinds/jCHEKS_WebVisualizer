@@ -1,213 +1,44 @@
-<?php
-
-class DatabaseManager {
+<?php class DatabaseManager {
     var $db = null;
-    function __construct($name) {
-        $this->db = new PDO("sqlite:databases/" . $name);        
+    function __construct($name, $limit = "" , $limitedRow) {
+        $this->limitedRow = $limitedRow;
+        if($this->limitedRow != ""){
+            $this->limit = "AND ".$this->limitedRow . " < ".$limit. " ";
+        } else{
+            $this->limit = "LIMIT ".$limit. " ";
+        }
+        $this->db = new PDO("sqlite:databases/" . $name);
+        $this->db->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
+        ini_set('memory_limit', '256M');
+        set_time_limit(300);
     }
     
-    function getNist1ResultsForSystem($systemId = null) {
-        if($systemId) {
-            $statement = $this->db->prepare("SELECT * FROM FrequencyMonobit_NIST_1 WHERE chaotic_system_id = :id");
-            $statement->bindParam(":id", $systemId, PDO::PARAM_STR);
-        } else {
-            $statement = $this->db->prepare("SELECT * FROM FrequencyMonobit_NIST_1");
-        }       
+    function getDataForASystemFromTableInDatabase($table, $systemId){
+        $statement = $this->db->prepare("SELECT * FROM ".$table." WHERE chaotic_system_id='".$systemId."' ".$this->limit);
         $statement->setFetchMode(PDO::FETCH_ASSOC);
-        $results = $statement->execute();
-        
-        if($results) {
-            return $statement->fetchAll();
-        }
-        return null;
+        if(!$statement->execute())return null;
+        return $statement->fetchAll();
     }
     
-    function getNist2ResultsForSystem($systemId = null) {
-        if($systemId) {
-            $statement = $this->db->prepare("SELECT * FROM FrequencyBlock_NIST_2 WHERE chaotic_system_id = :id");
-            $statement->bindParam(":id", $systemId, PDO::PARAM_STR);
-        } else {
-            $statement = $this->db->prepare("SELECT * FROM FrequencyBlock_NIST_2");
-        }       
+    function getDataOfAllSystemsFromTableInDatabase($table){
+        $statement = $this->db->prepare("SELECT * FROM ".$table." ".$this->limit);
         $statement->setFetchMode(PDO::FETCH_ASSOC);
-        $results = $statement->execute();
-        
-        if($results) {
-            return $statement->fetchAll();
-        }
-        return null;
+        if(!$statement->execute()) return null;
+        return $statement->fetchAll();
     }
     
-    function getNist3ResultsForSystem($systemId = null) {        
-        if($systemId) {
-            $statement = $this->db->prepare("SELECT * FROM Runs_NIST_3 WHERE chaotic_system_id = :id");
-            $statement->bindParam(":id", $systemId, PDO::PARAM_STR);
-        } else {
-            $statement = $this->db->prepare("SELECT * FROM Runs_NIST_3");
-        }       
+    function getOverallOccurenceData($table, $overallColumn){
+        $this->limit = str_replace("AND","WHERE",$this->limit);
+       $statement = $this->db->prepare("SELECT *, sum(".$overallColumn.") AS system FROM '".$table."' ".$this->limit."GROUP BY chaotic_system_id, ".$this->limitedRow);
         $statement->setFetchMode(PDO::FETCH_ASSOC);
-        $results = $statement->execute();
-        
-        if($results) {
-            return $statement->fetchAll();
-        }
-        return null;
+        if(!$statement->execute()) return null;
+        return $statement->fetchAll();
     }
     
-    function getNist4ResultsForSystem($systemId = null) {
-        if($systemId) {
-            $statement = $this->db->prepare("SELECT * FROM LongestRun_NIST_4 WHERE chaotic_system_id = :id");
-            $statement->bindParam(":id", $systemId, PDO::PARAM_STR);
-        } else {
-            $statement = $this->db->prepare("SELECT * FROM LongestRun_NIST_4");
-        }       
+    function getSystemsNamesInTable($table){
+        $statement = $this->db->prepare("SELECT DISTINCT chaotic_system_id FROM ".$table." ".$this->limit);
         $statement->setFetchMode(PDO::FETCH_ASSOC);
-        $results = $statement->execute();
-        
-        if($results) {
-            return $statement->fetchAll();
-        }
-        return null;
-    }
-    
-    function getEvolutionAgentLevelResults($systemId = null) {
-        if($systemId) {
-            $statement = $this->db->prepare("SELECT * FROM nbEvolutions_allAgentLevels WHERE chaotic_system_id = :id");
-            $statement->bindParam(":id", $systemId, PDO::PARAM_STR);
-        } else {
-            $statement = $this->db->prepare("SELECT * FROM nbEvolutions_allAgentLevels");
-        }       
-        $statement->setFetchMode(PDO::FETCH_ASSOC);
-        $results = $statement->execute();
-        
-        if($results) {
-            return $statement->fetchAll();
-        }
-        return null;
-    }
-    
-    function getEvolutionKeyBitsResults($systemId = null) {        
-        if($systemId) {
-            $statement = $this->db->prepare("SELECT * FROM nbEvolutions_allKeyBits WHERE chaotic_system_id = :id");
-            $statement->bindParam(":id", $systemId, PDO::PARAM_STR);
-        } else {
-            $statement = $this->db->prepare("SELECT * FROM nbEvolutions_allKeyBits");
-        }   
-        $statement->setFetchMode(PDO::FETCH_ASSOC);
-        $results = $statement->execute();
-        
-        if($results) {
-            return $statement->fetchAll();
-        }
-        return null;
-    }
-    
-    function getButterFlyResults($systemId = null) {
-        if($systemId) {
-            $statement = $this->db->prepare("SELECT * FROM butterfly_effect WHERE chaotic_system_id = :id");
-            $statement->bindParam(":id", $systemId, PDO::PARAM_STR);
-        } else {
-            $statement = $this->db->prepare("SELECT * FROM butterfly_effect");
-        }       
-        $statement->setFetchMode(PDO::FETCH_ASSOC);
-        $results = $statement->execute();
-        
-        if($results) {
-            return $statement->fetchAll();
-        }
-        return null;
-    } 
-    
-    function getOccurenceLevel($systemId = null) {
-        if($systemId) {
-            $statement = $this->db->prepare("SELECT * FROM nbOccurrences_level WHERE chaotic_system_id = :id");
-            $statement->bindParam(":id", $systemId, PDO::PARAM_STR);
-        } else {
-            $statement = $this->db->prepare("SELECT * FROM nbOccurrences_level");
-        }
-        $statement->setFetchMode(PDO::FETCH_ASSOC);
-        $results = $statement->execute();
-        
-        if($results) {
-            return $statement->fetchAll();
-        }
-        return null;
-    }
-    
-    function getOccurenceLevelVariation($systemId = null) {
-        if($systemId) {
-            $statement = $this->db->prepare("SELECT * FROM nbOccurrences_levelVariation WHERE chaotic_system_id = :id");
-            $statement->bindParam(":id", $systemId, PDO::PARAM_STR);
-        } else {
-            $statement = $this->db->prepare("SELECT * FROM nbOccurrences_levelVariation");
-        }
-        $statement->setFetchMode(PDO::FETCH_ASSOC);
-        $results = $statement->execute();
-        
-        if($results) {
-            return $statement->fetchAll();
-        }
-        return null;
-    }
-    
-    function getSystemsNamesForLevel() {
-        $statement = $this->db->prepare("SELECT DISTINCT(chaotic_system_id) FROM nbOccurrences_level");
-        $statement->setFetchMode(PDO::FETCH_ASSOC);
-        $results = $statement->execute();
-        
-        if($results) {
-            return $statement->fetchAll();
-        }
-        return null;
-    }
-    
-    function getSystemsNamesForLevelVariation() {
-        $statement = $this->db->prepare("SELECT DISTINCT chaotic_system_id FROM nbOccurrences_levelVariation ORDER BY chaotic_system_id");
-        $statement->setFetchMode(PDO::FETCH_ASSOC);
-        $results = $statement->execute();
-        
-        if($results) {
-            return $statement->fetchAll();
-        }
-        return null;
-    }
-    
-    function getSystemNamesForButterfly() {
-        $statement = $this->db->prepare("SELECT DISTINCT chaotic_system_id FROM butterfly_effect ORDER BY chaotic_system_id");
-        $statement->setFetchMode(PDO::FETCH_ASSOC);
-        $results = $statement->execute();
-
-        if($results) {
-            return $statement->fetchAll();
-        }
-        return null;
-    }
-
-    function getSystemNamesForDistanceEvolution() {
-        $statement = $this->db->prepare("SELECT DISTINCT chaotic_system_id FROM distance_between_evolution ORDER BY chaotic_system_id LIMIT 32");
-        $statement->setFetchMode(PDO::FETCH_ASSOC);
-        $results = $statement->execute();
-
-        if($results) {
-            return $statement->fetchAll();
-        }
-        return null;
-    }
-
-    function getDistanceEvolution($systemId = null){
-        if($systemId) {
-            $statement = $this->db->prepare("SELECT * FROM distance_between_evolution WHERE chaotic_system_id = :id LIMIT 150");
-            $statement->bindParam(":id", $systemId, PDO::PARAM_STR);
-        } else {
-            $statement = $this->db->prepare("SELECT * FROM distance_between_evolution");
-        }
-        $statement->setFetchMode(PDO::FETCH_ASSOC);
-        $results = $statement->execute();
-        
-        if($results) {
-            return $statement->fetchAll();
-        }
-        return null;
+        if(!$statement->execute()) return null;
+        return $statement->fetchAll();
     }
 }
-

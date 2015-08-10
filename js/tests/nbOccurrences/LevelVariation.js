@@ -1,9 +1,9 @@
 function nbOccurrences_LevelVariation(dataReader) {
     var id = "levelVariation";
     var systemIds = dataReader.getSystemNamesForLevelVariation();
-    Layout.addTab("levelVariation", "Nb occurrences Level Variation");
+    var updateButton = $("<button>").text("update");
+    Layout.addTab(id, "Nb occurrences Level Variation");
 
-    var currentSpecificId = 0;
     var config = {
         height: Layout.getContainerHeight(),
         width: Layout.getContainerWidth(),
@@ -13,52 +13,36 @@ function nbOccurrences_LevelVariation(dataReader) {
         chartTitle: "Occurrences of level variation"
     };
 
-    var chart = Chart.colorChart(dataReader.getVariationOccurences(systemIds[currentSpecificId]), config);
-
-    var sideBarContents = [];
-
-    function incrementSpecificId() {
-        currentSpecificId++;
-        if (currentSpecificId >= systemIds.length) currentSpecificId = 0;
-    }
-
-    function decrementSpecificId() {
-        currentSpecificId--;
-        if (currentSpecificId < 0) currentSpecificId = systemIds.length - 1;
-    }
-
     function updateConfig() {
         config.minDomain = $("#" + id + "MinDomain").val() || config.minDomain;
         config.maxDomain = $("#" + id + "MaxDomain").val() || config.maxDomain;
     }
 
-    function updateChart() {
-        chart.update(dataReader.getVariationOccurences(systemIds[currentSpecificId]), config)
+    function updateChart(currentId) {
+        chart.update(dataReader.getVariationOccurences(systemIds[currentId]), config)
     }
 
-    var update = function () {
-        updateConfig();
-        updateChart();
-    }
+    var chart = Chart.colorChart(dataReader.getVariationOccurences(systemIds[0]), config);
 
-    var onNext = function () {
-        incrementSpecificId();
-        update();
+    var updater = {
+        loadASystem: function (currentId) {
+            updateConfig();
+            updateChart(currentId);
+        },
+        loadAllSystems: function () {
+            chart.update(dataReader.getOverallVariationOccurences(), config)
+        },
+        update: null,
+        updateButton: updateButton
     };
 
-    var onPrevious = function () {
-        decrementSpecificId();
-        update();
-    };
-
-
-    sideBarContents.push(Layout.createNavigationButtons(onPrevious, onNext));
+    updateButton.click(updater.update);
+    var sideBarContents = [];
+    sideBarContents.push(MultiSystemManager(systemIds, updater));
     sideBarContents.push("<hr><br>Color minimum domain: ");
     sideBarContents.push(Layout.createScaleInput(id + "MinDomain"));
     sideBarContents.push("<hr><br>Color maximum domain: ");
     sideBarContents.push(Layout.createScaleInput(id + "MaxDomain"));
-    sideBarContents.push($("<button>").text("update").click(update));
-
-
+    sideBarContents.push(updateButton);
     Layout.setSidebarContent(id, sideBarContents);
 }

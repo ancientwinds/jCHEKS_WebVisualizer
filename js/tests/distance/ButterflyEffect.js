@@ -1,65 +1,52 @@
-    function ButterflyEffect(dataReader) {
+function ButterflyEffect(dataReader) {
+    var systemIds = dataReader.getSystemNamesForButterflyEffect();
 
+    var id = "butterfly";
+    var updateButton = $("<button>").text("update");
+    Layout.addTab(id, "Butterfly Effect");
 
-        var systemIds = dataReader.getSystemNamesForButterflyEffect();
+    var updateButton;
+    var currentSpecificId = 0;
 
-        var id = "butterfly";
+    var config = {
+        height: Layout.getContainerHeight(),
+        width: Layout.getContainerWidth(),
+        target: id + "Svg",
+        yAxisTitle: "System",
+        xAxisTitle: "Evolution",
+        chartTitle: "Distance (Butterfly)"
+    };
 
-        Layout.addTab(id, "Butterfly Effect");
+    var chart = Chart.colorChart(dataReader.getButterflyEffect(systemIds[currentSpecificId]), config);
 
-        var currentSpecificId = 0;
-
-        var config = {
-            height: Layout.getContainerHeight(),
-            width: Layout.getContainerWidth(),
-            target: id + "Svg",
-            yAxisTitle: "System",
-            xAxisTitle: "Evolution",
-            chartTitle: "Distance (Butterfly)"
-        };
-
-        var chart = Chart.colorChart(dataReader.getButterflyEffect(systemIds[currentSpecificId]), config);
-
-        function incrementSpecificId() {
-            currentSpecificId++;
-            if (currentSpecificId >= systemIds.length) currentSpecificId = 0;
-        }
-
-        function decrementSpecificId() {
-            currentSpecificId--;
-            if (currentSpecificId < 0) currentSpecificId = systemIds.length - 1;
-        }
-
-        function updateConfig() {
-            config.minDomain = $("#" + id + "MinDomain").val() || config.minDomain;
-            config.maxDomain = $("#" + id + "MaxDomain").val() || config.maxDomain;
-        }
-
-        function updateChart() {
-            chart.update(dataReader.getButterflyEffect(systemIds[currentSpecificId]), config)
-        }
-
-        var update = function () {
-            updateConfig();
-            updateChart();
-        }
-
-        var onNext = function () {
-            incrementSpecificId();
-            update();
-        };
-
-        var onPrevious = function () {
-            decrementSpecificId;
-            update();
-        };
-
-        var sideBarContents = [];
-        sideBarContents.push(Layout.createNavigationButtons(onPrevious, onNext));
-        sideBarContents.push("<hr><br>Color minimum domain: ");
-        sideBarContents.push(Layout.createScaleInput(id + "MinDomain"));
-        sideBarContents.push("<hr><br>Color maximum domain: ");
-        sideBarContents.push(Layout.createScaleInput(id + "MaxDomain"));
-        sideBarContents.push($("<button>").text("update").click(update));
-        Layout.setSidebarContent(id, sideBarContents);
+    function updateConfig() {
+        config.minDomain = $("#" + id + "MinDomain").val() || config.minDomain;
+        config.maxDomain = $("#" + id + "MaxDomain").val() || config.maxDomain;
     }
+
+    function updateChart(currentId) {
+        chart.update(dataReader.getButterflyEffect(systemIds[currentId]), config)
+    }
+
+    var updater = {
+        loadASystem: function (currentId) {
+            updateConfig();
+            updateChart(currentId);
+        },
+        loadAllSystems: function () {
+            chart.update(dataReader.getOverallButterflyEffect(), config)
+        },
+        update: null,
+        updateButton: updateButton
+    };
+    updateButton.click(updater.update);
+
+    var sideBarContents = [];
+    sideBarContents.push(MultiSystemManager(systemIds, updater));
+    sideBarContents.push("<hr><br>Color minimum domain: ");
+    sideBarContents.push(Layout.createScaleInput(id + "MinDomain"));
+    sideBarContents.push("<hr><br>Color maximum domain: ");
+    sideBarContents.push(Layout.createScaleInput(id + "MaxDomain"));
+    sideBarContents.push(updateButton);
+    Layout.setSidebarContent(id, sideBarContents);
+}

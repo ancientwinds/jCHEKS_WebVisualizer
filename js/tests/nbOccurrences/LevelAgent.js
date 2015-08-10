@@ -3,7 +3,7 @@ function nbOccurrences_LevelAgent(dataReader) {
     var systemIds = dataReader.getSystemNamesForLevel();
     var id = "levelAgent"
     Layout.addTab(id, "Nb Occurences LevelAgent");
-
+    var updateButton = $("<button>").text("update");
 
     var currentSpecificId = 0;
 
@@ -16,48 +16,40 @@ function nbOccurrences_LevelAgent(dataReader) {
         chartTitle: "Occurence of agent levels"
     };
 
-    function incrementSpecificId() {
-        currentSpecificId++;
-        if (currentSpecificId >= systemIds.length) currentSpecificId = 0;
-    }
 
-    function decrementSpecificId() {
-        currentSpecificId--;
-        if (currentSpecificId < 0) currentSpecificId = systemIds.length - 1;
-    }
-
-    function updateChart() {
-        chart.update(dataReader.getLevelOccurences(systemIds[currentSpecificId]), config)
+    function updateChart(currentId) {
+        chart.update(dataReader.getLevelOccurences(systemIds[currentId]), config)
     }
 
     function updateConfig() {
         config.minDomain = $("#" + id + "MinDomain").val();
         config.maxDomain = $("#" + id + "MaxDomain").val();
+
     }
-    var update = function () {
-        updateConfig();
-        updateChart();
-    }
-    var onNext = function () {
-        incrementSpecificId();
-        update();
+
+    var chart = Chart.colorChart(dataReader.getLevelOccurences(systemIds[0]), config);
+
+    var updater = {
+        loadASystem: function (currentId) {
+            updateConfig();
+            updateChart(currentId);
+        },
+        loadAllSystems: function () {
+            updateConfig();
+            chart.update(dataReader.getOverallLevelOccurences(), config)
+        },
+        update: null,
+        updateButton: updateButton
     };
 
-    var onPrevious = function () {
-        decrementSpecificId();
-        update();
-    };
-
-    var chart = Chart.colorChart(dataReader.getLevelOccurences(systemIds[currentSpecificId]), config);
-
+    updateButton.click(updater.update);
     var sideBarContents = [];
-
-    sideBarContents.push(Layout.createNavigationButtons(onPrevious, onNext));
+    sideBarContents.push(MultiSystemManager(systemIds, updater));
     sideBarContents.push("<hr><br>Color minimum domain: ");
     sideBarContents.push(Layout.createScaleInput(id + "MinDomain"));
     sideBarContents.push("<hr><br>Color maximum domain: ");
     sideBarContents.push(Layout.createScaleInput(id + "MaxDomain"));
-    sideBarContents.push($("<button>").text("update").click(update));
+    sideBarContents.push(updateButton);
     Layout.setSidebarContent(id, sideBarContents);
 
 }

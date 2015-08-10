@@ -3,109 +3,80 @@ var Layout = (function () {
     var frameIds = [];
 
     function switchTabs(frameToSwitch) {
+        var svgElement;
+        var sideBarElement;
         for (var i = 0; i < frameIds.length; i++) {
+            svgElement = $("#" + frameIds[i] + "Svg");
+            sideBarElement = $("#" + frameIds[i] + "Sidebar");
             if (frameIds[i] == frameToSwitch) {
-                if ($("#" + frameIds[i] + "Svg").is(":hidden")) {
-                    $("#" + frameIds[i] + "Svg").fadeIn();
-                }
-                if ($("#" + frameIds[i] + "Sidebar").is(":hidden")) {
-                    $("#" + frameIds[i] + "Sidebar").fadeIn();
-                }
-
+                if (svgElement.is(":hidden")) svgElement.fadeIn();
+                if (sideBarElement.is(":hidden")) sideBarElement.fadeIn();
             } else {
-                $('#' + frameIds[i] + "Svg").hide();
-                $('#' + frameIds[i] + "Sidebar").hide();
+                svgElement.hide();
+                sideBarElement.hide();
             }
-
         }
         w2ui.layout.get("main").tabs.active = frameToSwitch;
         w2ui.layout.get("main").tabs.refresh();
     }
 
     function initW2Layout(callback) {
-        var pstyle = 'border: 1px solid #dfdfdf; padding: 5px;';
-         
         $("body").w2layout({
             name: 'layout',
-            panels: [
-                {
-                    type: 'top',
-                    size: 50,
-                    resizable: false,
-                    //style: pstyle,
-                    toolbar: {
-                        name: 'toolbar',
-                        items: [
-                            /*{
-                                id: "fileLabel",
-                                type: 'html',
-                                caption: 'File: ',
-                            },
-                            {
-                                type: 'html',
-                                id: 'file',
-                                html: "<input type='file' id='file'>"
-                            },*/
-                            {
-                                type: 'button',
-                                id: 'loadButton',
-                                caption: 'Load',
-                                onClick: callback
-                            },
-                            {
-                                type: 'html',
-                                id: 'file',
-                                html: "<select id='dropdown'></select>"
-                            }
-                        ]
-                    }
-                },
-                {
-                    type: 'left',
-                    size: 200,
-                    resizable: false,
-                    content: "<div id='sidebar'></div>"
-                },
-                {
-                    type: 'main',
-                    content: "<div id='tabs'></div>",
-                    tabs: {
-                        onClick: function (event) {
-                            switchTabs(event.target)
-                        }
-                    }
-
+            panels: [{
+                type: 'top',
+                size: 50,
+                resizable: false,
+                toolbar: {
+                    name: 'toolbar',
+                    items: [{
+                        type: 'button',
+                        id: 'loadButton',
+                        caption: 'Load',
+                        onClick: callback
+                            }, {
+                        type: 'html',
+                        id: 'file',
+                        html: "<select id='dropdown'></select>"
+                            }]
                 }
-                ]
-
+                }, {
+                type: 'left',
+                size: 200,
+                resizable: false,
+                content: "<div id='sidebar'></div>"
+                }, {
+                type: 'main',
+                content: "<div id='tabs'></div>",
+                tabs: {
+                    onClick: function (event) {
+                        switchTabs(event.target)
+                    }
+                }
+            }]
         });
-        
+
         $.ajax({
             url: "../php/getDatabaseNames.php",
             type: "POST",
             dataType: 'json',
             async: false,
-            data: "type=levelsVariationName",
-            success: function(data2) {
-                for(var i = 0; i < data2.length; i++) {
+            success: function (data2) {
+                for (var i = 0; i < data2.length; i++) {
                     $("#dropdown").append($("<option value='" + data2[i] + "'>" + data2[i] + "</option>"))
                 }
             }
-        });
-
-        $('#file').w2field('file', {
-            max: 1
         });
 
     }
 
     var getContainerWidth = function () {
         return window.innerWidth - 200;
-    }
+    };
 
     var getContainerHeight = function () {
         return $("#tabs").height();
-    }
+    };
 
     function addTabSvg(id) {
         $("#tabs").append($("<svg id='" + id + "Svg'></svg>"))
@@ -140,23 +111,9 @@ var Layout = (function () {
         }
     };
 
-    var show = function () {
-        $("body").fadeIn(1000);
-    };
-    
-    var getSelectedFile = function () {
-        return $("#file").data('selected')[0].file;
-    };
-    
     var getSelectedDatabase = function () {
-        return document.getElementById('dropdown').options[document.getElementById('dropdown').selectedIndex].text;
+        return $("#dropdown option:selected").text();;
     };
-
-    var createNavigationButtons = function (onPreviousClick, onNextClick) {
-        var previousButton = $("<button>").text("Previous").click(onPreviousClick)
-        var nextButton = $("<button>").text("Next").click(onNextClick);
-        return $("<div>").append(previousButton).append(nextButton);
-    }
 
     var createScaleInput = function (id) {
         return $("<input>").attr("type", "number").attr("min", "0").attr("id", id);
@@ -168,10 +125,7 @@ var Layout = (function () {
         setSidebarContent: setSidebarContent,
         getContainerWidth: getContainerWidth,
         getContainerHeight: getContainerHeight,
-        show: show,
-        getSelectedFile: getSelectedFile, 
         getSelectedDatabase: getSelectedDatabase,
-        createNavigationButtons: createNavigationButtons,
         createScaleInput: createScaleInput
     };
 })();

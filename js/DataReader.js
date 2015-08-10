@@ -1,382 +1,223 @@
 var DataReader = function (databaseName) {
+    var shared = {};
+    shared.dataArray = [];
+    shared.formatedObject = {};
+    shared.counter = 0;
+    var defaultLimit = 150;
+    function resetDataArray() {
+        shared.dataArray = [];
+    }
+
     var self = {};
 
-    self.getAllKeybits = function () {
-        var data = [];
-        var formatedObject;
+    self.sendDataRequest = function (config) {
+        config.limit = (config.limit) ? config.limit: defaultLimit;
+        resetDataArray();
+        var dataToSend= "";
+        dataToSend += ((config.system) ? "&system=" + config.system : "");
+        dataToSend += ((config.limit) ? "&limit=" + config.limit : "");
+        dataToSend += ((config.limitedRow) ? "&limitedRow=" + config.limitedRow : "");
+        dataToSend += ((config.overallColumn) ? "&overallColumn=" + config.overallColumn : "");
+        dataToSend += "&type=" + config.type;
+        dataToSend += "&name=" + databaseName;
 
+        console.log(dataToSend.replace("&","").split("&").join(",   ").split("=").join(" = "));
         $.ajax({
             url: "../php/getter.php",
             type: "POST",
             dataType: 'json',
             async: false,
-            data: "type=keyBits&name=" + databaseName,
-            success: function(data2) {
-                for(var i = 0; i < data2.length; i++) {
-                    formatedObject = {
-                      systemId: data2[i].chaotic_system_id,
-                      x: parseInt(data2[i].evolution_count)
-                    };
-                    data.push(formatedObject);
-                }
+            data: dataToSend,
+            success: config.formatter,
+            error: function (msg) {
+                $("body").html(msg.responseText);
             }
         });
-        return data;               
+
+        console.log(shared.dataArray.slice());
+        return shared.dataArray.slice();
+    }
+
+    var evolutionDataFormatter = function (receivedData) {
+        for (var i = 0; i < receivedData.length; i++) {
+            shared.formatedObject = {
+                systemId: receivedData[i].chaotic_system_id,
+                x: parseInt(receivedData[i].evolution_count)
+            };
+            shared.dataArray.push(shared.formatedObject);
+        }
     };
+
+    var occurrenceDataFormatter = function (receivedData) {
+        for (var i = 0; i < receivedData.length; i++) {
+            shared.formatedObject = {
+                systemId: receivedData[i].chaotic_system_id,
+                y: parseInt(receivedData[i].agent_id),
+                x: parseInt(receivedData[i].variation),
+                color: parseInt(receivedData[i].occurence_count)
+
+            };
+            shared.dataArray.push(shared.formatedObject);
+        }
+    };
+
+    var overallOccurrenceDataFormatter =function (receivedData) {
+        var name;
+        var yValue = -1;
+        for (var i = 0; i < receivedData.length; i++) {
+            if(receivedData[i].chaotic_system_id!=name){
+                yValue++;
+                name = receivedData[i].chaotic_system_id;
+            }
+            shared.formatedObject = {
+                systemId: receivedData[i].chaotic_system_id,
+                y: yValue,
+                x: parseInt(receivedData[i].variation),
+                color: parseInt(receivedData[i].system)
+
+            };
+            shared.dataArray.push(shared.formatedObject);
+        }
+    };
+
+    var overallButterflyFormatter =function (receivedData) {
+        var name;
+        var yValue = -1;
+        for (var i = 0; i < receivedData.length; i++) {
+            if(receivedData[i].chaotic_system_id!=name){
+                yValue++;
+                name = receivedData[i].chaotic_system_id;
+            }
+            shared.formatedObject = {
+                systemId: receivedData[i].chaotic_system_id,
+                y: yValue,
+                x: parseInt(receivedData[i].evolution_count),
+                color: parseInt(receivedData[i].system)
+
+            };
+            shared.dataArray.push(shared.formatedObject);
+        }
+    };
+
+    var butterflyDataFormatter = function (receivedData) {
+        for (var i = 0; i < receivedData.length; i++) {
+            shared.formatedObject = {
+                systemId: receivedData[i].chaotic_system_id,
+                y: parseInt(receivedData[i].clone_id),
+                x: parseInt(receivedData[i].evolution_count),
+                color: parseInt(receivedData[i].distance)
+            };
+            shared.dataArray.push(shared.formatedObject);
+        }
+    }
+
+    var NISTDataFormatter = function (receivedData) {
+        for (var i = 0; i < receivedData.length; i++) {
+            shared.formatedObject = {
+                systemId: receivedData[i].chaotic_system_id,
+                y: i,
+                x: shared.counter,
+                color: parseFloat(receivedData[i].p_value)
+            };
+            shared.dataArray.push(shared.formatedObject);
+        }
+    }
+
+    var distanceDataFormatter = function (data2) {
+        for (var i = 0; i < data2.length; i++) {
+            shared.formatedObject = {
+                systemId: data2[i].chaotic_system_id,
+                y: shared.counter,
+                x: parseInt(data2[i].evolution_count),
+                color: parseInt(data2[i].distance)
+            };
+            shared.dataArray.push(shared.formatedObject);
+        }
+    }
+
+    var nameListFormatter = function (receivedData) {
+        for (var i = 0; i < receivedData.length; i++) {
+            shared.dataArray.push(receivedData[i].chaotic_system_id);
+        }
+    }
 
     self.getKeyRepetitions = function () {
-        var data = [];
-        /*var stmt = database.prepare("SELECT * FROM nbEvolutions_keyRepetition;");
-        var formatedObject;
-        var rowObject;
-        while (stmt.step()) {
-            rowObject = stmt.getAsObject();
-            formatedObject = {
-                systemId: rowObject.chaotic_system_id,
-                x: rowObject.evolution_count,
-            };
-            data.push(formatedObject);
-        }
-        stmt.free();*/
-        return data;
-    };
-
-    self.getAllLevelAgent = function () {
-        var data = [];
-        var formatedObject;
-
-        $.ajax({
-            url: "../php/getter.php",
-            type: "POST",
-            dataType: 'json',
-            async: false,
-            data: "type=agentLevels&name=" + databaseName,
-            success: function(data2) {
-                for(var i = 0; i < data2.length; i++) {
-                    formatedObject = {
-                      systemId: data2[i].chaotic_system_id,
-                      x: parseInt(data2[i].evolution_count)
-                    };
-                    data.push(formatedObject);
-                }
-            }
-        });
-        return data;
+        console.error("Datareader.getKeyRepetitions() Not implemented.");
     };
 
     self.getOverallLevelOccurences = function () {
-        console.error("'getOverallLevelOccurences' not implemented, random values will be returned.");
-        var data = [];
-        var formatedObject;
-
-        $.ajax({
-            url: "../php/getter.php",
-            type: "POST",
-            dataType: 'json',
-            async: false,
-            data: "type=agentLevels",
-            success: function(data2) {
-                for(var i = 0; i < data2.length; i++) {
-                    formatedObject = {
-                      systemId: data2[i].chaotic_system_id,
-                      x: parseInt(data2[i].evolution_count)
-                    };
-                    data.push(formatedObject);
-                }
-            }
-        });
-        return data;
-    };
-
-    self.getLevelOccurences = function (systemId) {
-        var data = [];
-        var formatedObject;
-
-        $.ajax({
-            url: "../php/getter.php",
-            type: "POST",
-            dataType: 'json',
-            async: false,
-            data: "type=occurenceLevel&system=" + systemId + "&name=" + databaseName,
-            success: function(data2) {
-                for(var i = 0; i < data2.length; i++) {
-                    formatedObject = {
-                      systemId: data2[i].chaotic_system_id,
-                      y: parseInt(data2[i].agent_id),
-                      x: parseInt(data2[i].variation),
-                      color: parseInt(data2[i].occurence_count)
-
-                    };
-                    data.push(formatedObject);
-                }
-            }
-        });
-        return data;
+        return self.sendDataRequest({ formatter: overallOccurrenceDataFormatter, type: "overallOccurenceLevel", limitedRow: "variation", overallColumn: "occurence_count"});
     };
 
     self.getOverallVariationOccurences = function () {
-        console.error("'getOverallVariationOccurences' not implemented, random values will be returned.");
-        var data = [];
-        var maxY = 50; //Math.floor(Math.random() * 200) + 56;
-        var maxX = 50; //Math.floor(Math.random() * 200) + 56;
-        for (var y = 0; y < maxY; y++) {
-            for (var x = 0; x < maxX; x++) {
-                data[y * maxX + x] = {};
-                data[y * maxX + x].color = Math.floor(Math.random() * 4000) + 4000;
-                data[y * maxX + x].x = x;
-                data[y * maxX + x].y = y;
-            }
-        }
-        console.log(data);
-        return data;
-    };
-
-    self.getVariationOccurences = function (systemId) {
-        var data = [];
-        var formatedObject;
-
-        $.ajax({
-            url: "../php/getter.php",
-            type: "POST",
-            dataType: 'json',
-            async: false,
-            data: "type=occurenceVariation&system=" + systemId + "&name=" + databaseName,
-            success: function(data2) {
-                for(var i = 0; i < data2.length; i++) {
-                    formatedObject = {
-                      y: parseInt(data2[i].agent_id),
-                      x: parseInt(data2[i].variation),
-                      color: parseInt(data2[i].occurence_count)
-
-                    };
-                    data.push(formatedObject);
-                }
-            }
-        });
-
-        return data;
-    };
-
-    self.getButterflyEffect = function (systemId) {
-        var data = [];
-        var formatedObject;
-
-        $.ajax({
-            url: "../php/getter.php",
-            type: "POST",
-            dataType: 'json',
-            async: false,
-            data: "type=butterfly&system=" + systemId + "&name=" + databaseName,
-            success: function(data2) {
-                for(var i = 0; i < data2.length; i++) {
-                    formatedObject = {
-                      systemId: data2[i].chaotic_system_id,
-                      y: parseInt(data2[i].clone_id),
-                      x: parseInt(data2[i].evolution_count),
-                      color: parseInt(data2[i].distance)
-
-                    };
-                    data.push(formatedObject);
-                }
-            }
-        });
-        return data;
+        return self.sendDataRequest({ formatter: overallOccurrenceDataFormatter, type: "overallOccurenceVariation", limitedRow: "variation", overallColumn: "occurence_count"});
     };
 
     self.getOverallButterflyEffect = function () {
-        console.error("'getOverallButterfly' not implemented, random values will be returned.");
-        var data = [];
-        var maxY = 10; //Math.floor(Math.random() * 128) + 4;
-        var maxX = 10; //Math.floor(Math.random() * 200) + 32;
-        for (var y = 0; y < maxY; y++) {
-            for (var x = 0; x < maxX; x++) {
-                data[y * maxX + x] = {};
-                data[y * maxX + x].color = Math.floor(Math.random() * 256);
-                data[y * maxX + x].x = x;
-                data[y * maxX + x].y = y;
-            }
-        }
-        return data;
+        return self.sendDataRequest({ formatter: overallButterflyFormatter, type: "overallButterfly", limitedRow: "evolution_count", overallColumn: "distance"});
     };
 
-    self.getOverallLevelVariation = function () {
-        console.error("'getOverallButterfly' not implemented, random values will be returned.");
-        var data = [];
-        var maxY = 10; //Math.floor(Math.random() * 128) + 4;
-        var maxX = 10; //Math.floor(Math.random() * 200) + 32;
-        for (var y = 0; y < maxY; y++) {
-            for (var x = 0; x < maxX; x++) {
-                data[y * maxX + x] = {};
-                data[y * maxX + x].color = Math.floor(Math.random() * 256);
-                data[y * maxX + x].x = x;
-                data[y * maxX + x].y = y;
-            }
-        }
-        return data;
+    self.getAllKeybits = function () {
+        return self.sendDataRequest({formatter: evolutionDataFormatter, type: "keyBits"});
     };
 
-    function getNist1() {
-        var data = [];
-        var formatedObject;
+    self.getAllLevelAgent = function () {
+        return self.sendDataRequest({formatter: evolutionDataFormatter, type: "agentLevels"});
+    };
 
-        $.ajax({
-            url: "../php/getter.php",
-            type: "POST",
-            dataType: 'json',
-            async: false,
-            data: "type=nist1&name=" + databaseName,
-            success: function(data2) {
-                for(var i = 0; i < data2.length; i++) {
-                    formatedObject = {
-                      systemId: data2[i].chaotic_system_id,
-                      y: i,
-                      x: 1,
-                      color: parseFloat(data2[i].p_value)
+    self.getLevelOccurences = function (systemId) {
+        return self.sendDataRequest({formatter: occurrenceDataFormatter, type: "occurenceLevel", system: systemId, limitedRow: "variation"});
+    };
 
-                    };
-                    data.push(formatedObject);
-                }
-            }
-        });
-        return data;
-    }
+    self.getVariationOccurences = function (systemId) {
+        return self.sendDataRequest({ formatter: occurrenceDataFormatter, type: "occurenceVariation", system: systemId, limitedRow: "variation"});
+    };
 
-    function getNist2() {
-        var data = [];
-        var formatedObject;
+    self.getButterflyEffect = function (systemId) {
+        return self.sendDataRequest({formatter: butterflyDataFormatter, type: "butterfly", system: systemId, limitedRow: "evolution_count"});
+    };
 
-        $.ajax({
-            url: "../php/getter.php",
-            type: "POST",
-            dataType: 'json',
-            async: false,
-            data: "type=nist2&name=" + databaseName,
-            success: function(data2) {
-                for(var i = 0; i < data2.length; i++) {
-                    formatedObject = {
-                      systemId: data2[i].chaotic_system_id,
-                      y: i,
-                      x: 2,
-                      color: parseFloat(data2[i].p_value)
+    self.getDistanceEvolutionForASystem = function (systemId) {
+        return self.sendDataRequest({formatter: distanceDataFormatter, type: "distanceEvolution", system: systemId,  limit: 150});
+    };
 
-                    };
-                    data.push(formatedObject);
-                }
-            }
-        });
-        return data;
-    }
-
-    function getNist3() {
-        var data = [];
-        var formatedObject;
-
-        $.ajax({
-            url: "../php/getter.php",
-            type: "POST",
-            dataType: 'json',
-            async: false,
-            data: "type=nist3&name=" + databaseName,
-            success: function(data2) {
-                for(var i = 0; i < data2.length; i++) {
-                    formatedObject = {
-                      systemId: data2[i].chaotic_system_id,
-                      y: i,
-                      x: 3,
-                      color: parseFloat(data2[i].p_value)
-
-                    };
-                    data.push(formatedObject);
-                }
-            }
-        });
-        return data;
-    }
-
-    function getNist4() {
-        var data = [];
-        var formatedObject;
-
-        $.ajax({
-            url: "../php/getter.php",
-            type: "POST",
-            dataType: 'json',
-            async: false,
-            data: "type=nist4&name=" + databaseName,
-            success: function(data2) {
-                for(var i = 0; i < data2.length; i++) {
-                    formatedObject = {
-                      systemId: data2[i].chaotic_system_id,
-                      y: i,
-                      x: 4,
-                      color: parseFloat(data2[i].p_value)
-
-                    };
-                    data.push(formatedObject);
-                }
-            }
-        });
-        return data;
-    }
+    self.getDistanceEvolution = function () {
+        var allDistanceData = [];
+        var systemIds = self.getSystemNamesForDistanceEvolution();
+        for (shared.counter = 0; shared.counter < systemIds.length; shared.counter++) {
+            allDistanceData = allDistanceData.concat(self.getDistanceEvolutionForASystem(systemIds[shared.counter]));
+        }
+        return allDistanceData;
+    };
 
     self.getNist = function () {
-        var data = [];
+        var allNistData = [];
+        shared.counter = 1;
+        allNistData = allNistData.concat(self.sendDataRequest({formatter: NISTDataFormatter, type: "nist1"}));
+        shared.counter++;
+        allNistData = allNistData.concat(self.sendDataRequest({formatter: NISTDataFormatter, type: "nist2"}));
+        shared.counter++;
+        allNistData = allNistData.concat(self.sendDataRequest({formatter: NISTDataFormatter, type: "nist3"}));
+        shared.counter++;
+        allNistData = allNistData.concat(self.sendDataRequest({formatter: NISTDataFormatter, type: "nist4"}));
+        return allNistData;
+    };
 
-        $.ajax({
-            url: "../php/getter.php",
-            type: "POST",
-            dataType: 'json',
-            async: false,
-            data: "type=butterflyName&name=" + databaseName,
-            success: function(data2) {
-                for(var i = 0; i < data2.length; i++) {
-                    data.push(data2[i].chaotic_system_id);
-                }
-            }
-        });
-
-        return data;
+    self.getSystemNamesForDistanceEvolution = function () {
+        return self.sendDataRequest({ formatter: nameListFormatter, type: "namesForDistanceEvolution"});
     };
 
     self.getSystemNamesForLevel = function () {
-        var data = [];
-
-        $.ajax({
-            url: "../php/getter.php",
-            type: "POST",
-            dataType: 'json',
-            async: false,
-            data: "type=levelsName&name=" + databaseName,
-            success: function(data2) {
-                for(var i = 0; i < data2.length; i++) {
-                    data.push(data2[i].chaotic_system_id);
-                }
-            }
-        });
-
-        return data;
+        return self.sendDataRequest({formatter: nameListFormatter, type: "levelsName"});
     };
 
     self.getSystemNamesForLevelVariation = function () {
-        var data = [];
+        return self.sendDataRequest({formatter: nameListFormatter, type: "levelsVariationName"});
+    };
 
-        $.ajax({
-            url: "../php/getter.php",
-            type: "POST",
-            dataType: 'json',
-            async: false,
-            data: "type=levelsVariationName&name=" + databaseName,
-            success: function(data2) {
-                for(var i = 0; i < data2.length; i++) {
-                    data.push(data2[i].chaotic_system_id);
-                }
-            }
-        });        
-
-        return data;
+    self.getSystemNamesForButterflyEffect = function () {
+        return self.sendDataRequest({formatter: nameListFormatter, type: "butterflyName"});
     };
 
     return self;
 };
-
-

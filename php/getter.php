@@ -18,12 +18,7 @@
                 echo json_encode($db->getSystemsNamesInTable("nbOccurrences_level"));
                 break; 
             case "occurenceLevel":
-                if($systemId != ""){
-                    echo json_encode($db->getDataForASystemFromTableInDatabase("nbOccurrences_level", $systemId));
-                }
-                else{
-                    echo json_encode($db->getOverallOccurenceData);
-                }
+                echo json_encode($db->getDataForASystemFromTableInDatabase("nbOccurrences_level", $systemId));
                 break;                       
             case "nist1":
                 echo json_encode($db->getDataOfAllSystemsFromTableInDatabase("FrequencyMonobit_NIST_1"));

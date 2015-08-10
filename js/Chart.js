@@ -265,9 +265,31 @@
             createLines(legend, lines);
         };
 
-        Chart.colorChart = function colorChartFactory(data, config) {
-            var colorChart = {},
-                targetHeight, targetWidth, targetId, padding, minDomain, maxDomain, chart, elementSize, maxX, minX, maxY, minY, xAxisBuilder, colorScale, xScale, yScale, yAxisBuilder, yAxisElement, xAxisElement, yAxisTitle, xAxisTitle, chartTitle;
+        Chart.colorChart = function colorChartFactory(newData, config) {
+            var colorChart = {};
+            var data = newData;
+            var targetHeight;
+            var targetWidth;
+            var targetId;
+            var padding;
+            var minDomain;
+            var maxDomain;
+            var chart;
+            var elementSize;
+            var maxX;
+            var minX;
+            var maxY;
+            var minY;
+            var xAxisBuilder;
+            var colorScale;
+            var xScale;
+            var yScale;
+            var yAxisBuilder;
+            var yAxisElement;
+            var xAxisElement;
+            var yAxisTitle;
+            var xAxisTitle;
+            var chartTitle;
 
 
             var xAccessor = function (d) {
@@ -287,8 +309,13 @@
                 targetId = config.target || targetId || "chart";
                 padding = config.padding || padding || 50;
 
-                minDomain = config.minDomain || minDomain || d3.min(data, colorAccessor);
-                maxDomain = config.maxDomain || maxDomain || d3.max(data, colorAccessor);
+                console.log(1);
+                var min = d3.min(data, colorAccessor);
+                var max = d3.max(data, colorAccessor);
+                console.log(2);
+                minDomain = config.minDomain || min;
+                maxDomain = config.maxDomain || max;
+
 
                 chart = d3.select("#" + targetId);
                 elementSize = 5;
@@ -378,7 +405,8 @@
                     });
             }
 
-            colorChart.update = function (data, config) {
+            colorChart.update = function (newData, config) {
+                data = newData;
                 maxX = d3.max(data, xAccessor) + 1;
                 minX = d3.min(data, xAccessor);
                 maxY = d3.max(data, yAccessor) + 1;

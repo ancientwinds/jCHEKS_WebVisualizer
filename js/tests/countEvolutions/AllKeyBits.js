@@ -2,7 +2,7 @@
 
         Layout.addTab("keyBits", "AllKeyBits");
         var id = "keyBits";
-        Chart.createBarChart(dataReader.getAllKeybits(), {
+        Chart.BarChart(dataReader.getAllKeybits(), {
             height: Layout.getContainerHeight(),
             width: Layout.getContainerWidth(),
             target: id + "Svg",

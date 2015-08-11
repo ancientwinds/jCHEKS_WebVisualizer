@@ -98,7 +98,7 @@
         }
 
         Chart = {};
-        Chart.createBarChart = function (data, config) {
+        Chart.BarChart = function (data, config) {
             var targetHeight;
             var elementHeight;
             var elementPadding;
@@ -144,6 +144,7 @@
             var xAxis = createAxis(xScale, "top");
 
             var tooltip = toolTipFactory();
+
 
             chart.selectAll("svg")
                 .data(data)
@@ -309,10 +310,8 @@
                 targetId = config.target || targetId || "chart";
                 padding = config.padding || padding || 50;
 
-                console.log(1);
                 var min = d3.min(data, colorAccessor);
                 var max = d3.max(data, colorAccessor);
-                console.log(2);
                 minDomain = config.minDomain || min;
                 maxDomain = config.maxDomain || max;
 
@@ -411,6 +410,7 @@
                 minX = d3.min(data, xAccessor);
                 maxY = d3.max(data, yAccessor) + 1;
                 minY = d3.min(data, yAccessor);
+                if(config.reset) config = {};
                 applyConfig(config);
                 colorScale = createScale([minDomain, maxDomain], [0, 300]);
                 xScale = createOrdinalScale(d3.range(maxX), [padding, maxX * elementSize + padding]);

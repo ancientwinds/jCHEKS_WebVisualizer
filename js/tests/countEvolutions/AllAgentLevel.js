@@ -3,7 +3,7 @@
         var id = "allLevelAgent";
         Layout.addTab(id, "AllLevelAgent");
 
-        Chart.createBarChart(dataReader.getAllLevelAgent(), {
+        Chart.BarChart(dataReader.getAllLevelAgent(), {
             height: Layout.getContainerHeight(),
             width: Layout.getContainerWidth(),
             target: id + "Svg",

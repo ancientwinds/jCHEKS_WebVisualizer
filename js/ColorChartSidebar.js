@@ -14,9 +14,7 @@ var ColorChartSidebar = function (mainId) {
     sidebar.scale.minRangeInput = createScaleInput("ColorMinRange", "Min");
     sidebar.scale.maxRangeInput = createScaleInput("ColorMaxRange", "Max");
 
-    sidebar.elementSize = {};
-    sidebar.elementSize.heightInput = null; // Not implemented
-    sidebar.elementSize.widthInput = null; // Not implemented
+    sidebar.elementSize = createScaleInput("Size", "Size");
 
     sidebar.white = {};
     sidebar.white.min = null; // Not implemented
@@ -33,20 +31,31 @@ var ColorChartSidebar = function (mainId) {
         configToUpdate.scale.maxDomain = sidebar.scale.maxDomainInput.children().eq(1).val();
         configToUpdate.scale.minRange = sidebar.scale.minRangeInput.children().eq(1).val();
         configToUpdate.scale.maxRange = sidebar.scale.maxRangeInput.children().eq(1).val();
+        configToUpdate.elementSize = sidebar.elementSize.children().eq(1).val();
     };
 
     self.getHTML = function () {
         var scaleSettings = $("<div>").attr("id", mainId + "ScaleSettings");
         scaleSettings
-            .append($("<p>").text("Domain"))
+            .append("<hr>")
+            .append($("<strong>").text("Scale domain"))
+            .append("<br>")
             .append(sidebar.scale.minDomainInput)
             .append("<br>")
             .append(sidebar.scale.maxDomainInput)
             .append("<br>").append("<br>")
-            .append($("<p>").text("Range"))
+            .append($("<strong>").text("Scale range"))
+            .append("<br>")
             .append(sidebar.scale.minRangeInput)
             .append("<br>")
-            .append(sidebar.scale.maxRangeInput);
+            .append(sidebar.scale.maxRangeInput)
+            .append("<hr>")
+            .append($("<strong>").text("Dimension"))
+            .append("<br>")
+            .append(sidebar.elementSize)
+            .append("<br>")
+            .append("<hr>")
+            .append("<br>");
 
         return scaleSettings;
     }

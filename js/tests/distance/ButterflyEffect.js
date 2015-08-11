@@ -6,7 +6,6 @@ function ButterflyEffect(dataReader) {
     Layout.addTab(id, "Butterfly Effect");
     var colorChartSidebar = ColorChartSidebar(id);
     var updateButton;
-    var currentSpecificId = 0;
 
     var config = {
         height: Layout.getContainerHeight(),
@@ -17,7 +16,7 @@ function ButterflyEffect(dataReader) {
         chartTitle: "Distance (Butterfly)"
     };
 
-    var chart = Chart.colorChart(dataReader.getButterflyEffect(systemIds[currentSpecificId]), config);
+    var chart = Chart.colorChart(dataReader.getButterflyEffect(systemIds[0]), config);
 
     function updateConfig() {
         colorChartSidebar.updateConfigs(config);

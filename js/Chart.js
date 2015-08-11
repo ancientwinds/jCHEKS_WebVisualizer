@@ -324,9 +324,8 @@
                     maxRange = 330;
                 }
 
-
                 chart = d3.select("#" + targetId);
-                elementSize = 5;
+                elementSize = config.elementSize || 5;
                 var width = (elementSize * maxX + padding * 2)
                 $("#" + targetId).width((width < targetWidth) ? targetWidth - padding : width);
                 $("#" + targetId).height(elementSize * maxY + padding * 2);
@@ -335,7 +334,6 @@
                 xAxisTitle = config.xAxisTitle || "X axis";
                 chartTitle = config.chartTitle || "Color Chart";
             }
-
 
             function determineOrdinalsValues(min, max) {
                 if (elementSize < 10) {
@@ -638,12 +636,9 @@
                         }
                     }
                 });
-
                 elements.exit().remove();
             };
-
             nistChart.update(data, config);
-
             return nistChart;
         };
 

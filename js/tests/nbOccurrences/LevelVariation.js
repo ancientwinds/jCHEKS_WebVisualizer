@@ -3,7 +3,7 @@ function nbOccurrences_LevelVariation(dataReader) {
     var systemIds = dataReader.getSystemNamesForLevelVariation();
     var updateButton = $("<button>").text("update");
     Layout.addTab(id, "Nb occurrences Level Variation");
-
+    var colorChartSidebar = ColorChartSidebar(config);
     var config = {
         height: Layout.getContainerHeight(),
         width: Layout.getContainerWidth(),
@@ -39,10 +39,7 @@ function nbOccurrences_LevelVariation(dataReader) {
     updateButton.click(updater.update);
     var sideBarContents = [];
     sideBarContents.push(MultiSystemManager(systemIds, updater));
-    sideBarContents.push("<hr><br>Color minimum domain: ");
-    sideBarContents.push(Layout.createScaleInput(id + "MinDomain"));
-    sideBarContents.push("<hr><br>Color maximum domain: ");
-    sideBarContents.push(Layout.createScaleInput(id + "MaxDomain"));
+    sideBarContents.push(colorChartSidebar.getHTML());
     sideBarContents.push(updateButton);
     Layout.setSidebarContent(id, sideBarContents);
 }

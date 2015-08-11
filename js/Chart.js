@@ -304,16 +304,19 @@
             }
 
             function applyConfig(config) {
-                targetHeight = config.height || targetHeight || 100;
-                targetWidth = config.width || targetWidth || 100;
+                targetHeight = config.height || 100;
+                targetWidth = config.width || 100;
 
-                targetId = config.target || targetId || "chart";
-                padding = config.padding || padding || 50;
+                targetId = config.target || "chart";
+                padding = config.padding || 50;
 
-                var min = d3.min(data, colorAccessor);
-                var max = d3.max(data, colorAccessor);
-                minDomain = config.minDomain || min;
-                maxDomain = config.maxDomain || max;
+                if (config.scale) {
+                    minDomain = config.scale.minDomain || d3.min(data, colorAccessor);
+                    maxDomain = config.scale.maxDomain || d3.max(data, colorAccessor);
+                } else {
+                    minDomain = d3.min(data, colorAccessor);
+                    maxDomain = d3.max(data, colorAccessor);
+                }
 
 
                 chart = d3.select("#" + targetId);
@@ -410,7 +413,7 @@
                 minX = d3.min(data, xAccessor);
                 maxY = d3.max(data, yAccessor) + 1;
                 minY = d3.min(data, yAccessor);
-                if(config.reset) config = {};
+                if (config.reset) config = {};
                 applyConfig(config);
                 colorScale = createScale([minDomain, maxDomain], [0, 300]);
                 xScale = createOrdinalScale(d3.range(maxX), [padding, maxX * elementSize + padding]);

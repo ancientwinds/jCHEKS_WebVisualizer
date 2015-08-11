@@ -1,13 +1,9 @@
 function DistanceEvolution(dataReader) {
-
-
-
     var id = "distance";
 
     Layout.addTab(id, "Distance between evolution");
 
-    var currentSpecificId = 0;
-
+    var colorChartSidebar = ColorChartSidebar(config);
     var config = {
         height: Layout.getContainerHeight(),
         width: Layout.getContainerWidth(),
@@ -36,10 +32,7 @@ function DistanceEvolution(dataReader) {
 
 
     var sideBarContents = [];
-    sideBarContents.push("<hr><br>Color minimum domain: ");
-    sideBarContents.push(Layout.createScaleInput(id + "MinDomain"));
-    sideBarContents.push("<hr><br>Color maximum domain: ");
-    sideBarContents.push(Layout.createScaleInput(id + "MaxDomain"));
+    sideBarContents.push(colorChartSidebar.getHTML());
     sideBarContents.push($("<button>").text("update").click(update));
     Layout.setSidebarContent(id, sideBarContents);
 }

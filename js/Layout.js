@@ -115,9 +115,6 @@ var Layout = (function () {
         return $("#dropdown option:selected").text();;
     };
 
-    var createScaleInput = function (id) {
-        return $("<input>").attr("type", "number").attr("min", "0").attr("id", id);
-    }
 
     return {
         init: initW2Layout,
@@ -126,6 +123,5 @@ var Layout = (function () {
         getContainerWidth: getContainerWidth,
         getContainerHeight: getContainerHeight,
         getSelectedDatabase: getSelectedDatabase,
-        createScaleInput: createScaleInput
     };
 })();

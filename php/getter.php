@@ -1,13 +1,13 @@
 <?php
     include("db/db.php"); 
     header('Content-type: application/json');
-    function getData($type, $systemId, $databaseName, $limit, $limitedRow, $overallColumn) {
-        $db = new DatabaseManager($databaseName, $limit, $limitedRow);
+    function getData($configs) {
+        $db = new DatabaseManager($configs["name"], $configs["limit"], $configs["limitedRow"]);
         if(!$db) {
            echo $db->lastErrorMsg();
         }
         
-        switch ($type) {
+        switch ($configs["type"]) {
             case "keyBits" :
                 echo json_encode($db->getDataOfAllSystemsFromTableInDatabase("nbEvolutions_allKeyBits"));
                 break;
@@ -18,7 +18,7 @@
                 echo json_encode($db->getSystemsNamesInTable("nbOccurrences_level"));
                 break; 
             case "occurenceLevel":
-                echo json_encode($db->getDataForASystemFromTableInDatabase("nbOccurrences_level", $systemId));
+                echo json_encode($db->getDataForASystemFromTableInDatabase("nbOccurrences_level", $configs["system"]));
                 break;                       
             case "nist1":
                 echo json_encode($db->getDataOfAllSystemsFromTableInDatabase("FrequencyMonobit_NIST_1"));
@@ -36,43 +36,40 @@
                 echo json_encode($db->getSystemsNamesInTable("butterfly_effect"));
                 break;
             case "butterfly":
-                echo json_encode($db->getDataForASystemFromTableInDatabase("butterfly_effect", $systemId));
+                echo json_encode($db->getDataForASystemFromTableInDatabase("butterfly_effect", $configs["system"]));
                 break;
             case "levelsVariationName":
                 echo json_encode($db->getSystemsNamesInTable("nbOccurrences_levelVariation"));
                 break;
             case "occurenceVariation":
-                echo json_encode($db->getDataForASystemFromTableInDatabase("nbOccurrences_levelVariation", $systemId));
+                echo json_encode($db->getDataForASystemFromTableInDatabase("nbOccurrences_levelVariation", $configs["system"]));
                 break;
             case "distanceEvolution":
-                echo json_encode($db->getDataForASystemFromTableInDatabase("distance_between_evolution", $systemId));
+                echo json_encode($db->getDataForASystemFromTableInDatabase("distance_between_evolution", $configs["system"]));
                 break;
             case "namesForDistanceEvolution":
                 echo json_encode($db->getSystemsNamesInTable("distance_between_evolution"));
                 break;
             case "overallOccurenceVariation":
-                echo json_encode($db->getOverallOccurenceData("nbOccurrences_levelVariation", $overallColumn));
+                echo json_encode($db->getOverallOccurenceData("nbOccurrences_levelVariation", $configs["overallColumn"]));
                 break;
             case "overallOccurenceLevel":
-                echo json_encode($db->getOverallOccurenceData("nbOccurrences_level", $overallColumn));
+                echo json_encode($db->getOverallOccurenceData("nbOccurrences_level", $configs["overallColumn"]));
                 break;
             case "overallButterfly":
-                echo json_encode($db->getOverallOccurenceData("butterfly_effect", $overallColumn));
+                echo json_encode($db->getOverallOccurenceData("butterfly_effect", $configs{"overallColumn"}));
                 break;
         }
     }
 
-    $type = "";
-    $system = "";
-    $name = "";
-    $limit = "";
-    $limitedRow = "";
-    $overallColumn = "";
-    if(isset($_POST["type"])) $type = $_POST["type"];
-    if(isset($_POST["system"])) $system = $_POST["system"];
-    if(isset($_POST["name"])) $name = $_POST["name"];
-    if(isset($_POST["limit"])) $limit = $_POST["limit"];
-    if(isset($_POST["limitedRow"])) $limitedRow = $_POST["limitedRow"];
-    if(isset($_POST["overallColumn"])) $overallColumn = $_POST["overallColumn"];
-
-    getData($type, $system, $name, $limit, $limitedRow, $overallColumn);
+    function validateConfigs($configs){
+        $settingNames = array_keys($configs);
+        $result = array();
+        foreach($settingNames as $setting){
+                $result[$setting] = (isset($_POST[$setting]))? $_POST[$setting] : "";
+        }
+        return $result;
+    }
+    $configs = array("type" => "", "system" => "", "name" => "", "limit" => "", "limitedRow" => "", "overallColumn" => "" );
+    $configs = validateConfigs($configs);
+    getData($configs);

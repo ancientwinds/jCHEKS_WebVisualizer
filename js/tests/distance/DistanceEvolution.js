@@ -3,7 +3,7 @@ function DistanceEvolution(dataReader) {
 
     Layout.addTab(id, "Distance between evolution");
 
-    var colorChartSidebar = ColorChartSidebar(config);
+    var colorChartSidebar = ColorChartSidebar(id);
     var config = {
         height: Layout.getContainerHeight(),
         width: Layout.getContainerWidth(),
@@ -17,8 +17,7 @@ function DistanceEvolution(dataReader) {
 
 
     function updateConfig() {
-        config.minDomain = $("#" + id + "MinDomain").val() || config.minDomain;
-        config.maxDomain = $("#" + id + "MaxDomain").val() || config.maxDomain;
+        colorChartSidebar.updateConfigs(config);
     }
 
     function updateChart() {

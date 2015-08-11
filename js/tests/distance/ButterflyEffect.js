@@ -4,7 +4,7 @@ function ButterflyEffect(dataReader) {
     var id = "butterfly";
     var updateButton = $("<button>").text("update");
     Layout.addTab(id, "Butterfly Effect");
-    var colorChartSidebar = ColorChartSidebar(config);
+    var colorChartSidebar = ColorChartSidebar(id);
     var updateButton;
     var currentSpecificId = 0;
 
@@ -20,8 +20,7 @@ function ButterflyEffect(dataReader) {
     var chart = Chart.colorChart(dataReader.getButterflyEffect(systemIds[currentSpecificId]), config);
 
     function updateConfig() {
-        config.minDomain = $("#" + id + "MinDomain").val() || config.minDomain;
-        config.maxDomain = $("#" + id + "MaxDomain").val() || config.maxDomain;
+        colorChartSidebar.updateConfigs(config);
     }
 
     function updateChart(currentId) {

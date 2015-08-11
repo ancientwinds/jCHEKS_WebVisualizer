@@ -4,7 +4,7 @@ function nbOccurrences_LevelAgent(dataReader) {
     var id = "levelAgent"
     Layout.addTab(id, "Nb Occurences LevelAgent");
     var updateButton = $("<button>").text("update");
-    var colorChartSidebar = ColorChartSidebar(config);
+    var colorChartSidebar = ColorChartSidebar(id);
 
     var config = {
         height: Layout.getContainerHeight(),
@@ -21,8 +21,6 @@ function nbOccurrences_LevelAgent(dataReader) {
     }
 
     function updateConfig() {
-        config.minDomain = $("#" + id + "MinDomain").val();
-        config.maxDomain = $("#" + id + "MaxDomain").val();
         colorChartSidebar.updateConfigs(config);
     }
 

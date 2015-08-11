@@ -83,7 +83,7 @@ var Layout = (function () {
     }
 
     function addTabSideBar(id) {
-        $("#sidebar").append($("<div class='panel' width='200' height='600' id='" + id + "Sidebar'>" + id + "</div>"));
+        $("#sidebar").append($("<div class='panel' width='200' height='600' id='" + id + "Sidebar'></div>"));
     }
 
     function addTabElement(id, caption) {

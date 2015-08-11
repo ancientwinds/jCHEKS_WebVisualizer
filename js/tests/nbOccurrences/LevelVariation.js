@@ -3,7 +3,7 @@ function nbOccurrences_LevelVariation(dataReader) {
     var systemIds = dataReader.getSystemNamesForLevelVariation();
     var updateButton = $("<button>").text("update");
     Layout.addTab(id, "Nb occurrences Level Variation");
-    var colorChartSidebar = ColorChartSidebar(config);
+    var colorChartSidebar = ColorChartSidebar(id);
     var config = {
         height: Layout.getContainerHeight(),
         width: Layout.getContainerWidth(),
@@ -14,8 +14,7 @@ function nbOccurrences_LevelVariation(dataReader) {
     };
 
     function updateConfig() {
-        config.minDomain = $("#" + id + "MinDomain").val() || config.minDomain;
-        config.maxDomain = $("#" + id + "MaxDomain").val() || config.maxDomain;
+        colorChartSidebar.updateConfigs(config);
     }
 
     function updateChart(currentId) {

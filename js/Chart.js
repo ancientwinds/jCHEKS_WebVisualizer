@@ -291,6 +291,8 @@
             var yAxisTitle;
             var xAxisTitle;
             var chartTitle;
+            var minRange;
+            var maxRange;
 
 
             var xAccessor = function (d) {
@@ -313,9 +315,13 @@
                 if (config.scale) {
                     minDomain = config.scale.minDomain || d3.min(data, colorAccessor);
                     maxDomain = config.scale.maxDomain || d3.max(data, colorAccessor);
+                    minRange = config.scale.minRange || 0;
+                    maxRange = config.scale.maxRange || 330;
                 } else {
                     minDomain = d3.min(data, colorAccessor);
                     maxDomain = d3.max(data, colorAccessor);
+                    minRange = 0;
+                    maxRange = 330;
                 }
 
 
@@ -415,7 +421,7 @@
                 minY = d3.min(data, yAccessor);
                 if (config.reset) config = {};
                 applyConfig(config);
-                colorScale = createScale([minDomain, maxDomain], [0, 300]);
+                colorScale = createScale([minDomain, maxDomain], [minRange, maxRange]);
                 xScale = createOrdinalScale(d3.range(maxX), [padding, maxX * elementSize + padding]);
                 yScale = createOrdinalScale(d3.range(maxY), [padding, maxY * elementSize + padding]);
                 xAxisBuilder = createAxis(xScale, "top", determineOrdinalsValues(minX, maxX));

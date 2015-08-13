@@ -17,14 +17,15 @@ function nbOccurrences_LevelAgent(dataReader) {
 
 
     function updateChart(currentId) {
-        chart.update(dataReader.getLevelOccurences(systemIds[currentId]), config)
+        chart.update(dataReader.getLevelOccurences(systemIds[currentId]), config);
+        colorChartSidebar.updateStats(chart.getStats());
     }
 
     function updateConfig() {
         colorChartSidebar.updateConfigs(config);
     }
 
-    var chart = Chart.colorChart(dataReader.getLevelOccurences(systemIds[0]), config);
+    var chart = Chart.ColorChart(dataReader.getLevelOccurences(systemIds[0]), config);
 
     var updater = {
         loadASystem: function (currentId) {
@@ -33,10 +34,12 @@ function nbOccurrences_LevelAgent(dataReader) {
         },
         loadAllSystems: function () {
             updateConfig();
-            chart.update(dataReader.getOverallLevelOccurences(), config)
+            chart.update(dataReader.getOverallLevelOccurences(), config);
+            colorChartSidebar.updateStats(chart.getStats());
         },
         update: null,
-        updateButton: updateButton
+        updateButton: updateButton,
+        config: config
     };
     updateButton.click(updater.update);
     var sideBarContents = [];

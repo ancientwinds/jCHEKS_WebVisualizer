@@ -13,7 +13,7 @@ function DistanceEvolution(dataReader) {
         chartTitle: "Distance between evolution "
     };
 
-    var chart = Chart.colorChart(dataReader.getDistanceEvolution(), config);
+    var chart = Chart.ColorChart(dataReader.getDistanceEvolution(), config);
 
 
     function updateConfig() {
@@ -21,14 +21,14 @@ function DistanceEvolution(dataReader) {
     }
 
     function updateChart() {
-        chart.update(dataReader.getDistanceEvolution(), config)
+        chart.update(dataReader.getDistanceEvolution(), config);
+        colorChartSidebar.updateStats(chart.getStats());
     }
 
     var update = function () {
         updateConfig();
         updateChart();
     }
-
 
     var sideBarContents = [];
     sideBarContents.push(colorChartSidebar.getHTML());

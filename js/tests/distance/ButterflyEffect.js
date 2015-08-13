@@ -16,14 +16,15 @@ function ButterflyEffect(dataReader) {
         chartTitle: "Distance (Butterfly)"
     };
 
-    var chart = Chart.colorChart(dataReader.getButterflyEffect(systemIds[0]), config);
+    var chart = Chart.ColorChart(dataReader.getButterflyEffect(systemIds[0]), config);
 
     function updateConfig() {
         colorChartSidebar.updateConfigs(config);
     }
 
     function updateChart(currentId) {
-        chart.update(dataReader.getButterflyEffect(systemIds[currentId]), config)
+        chart.update(dataReader.getButterflyEffect(systemIds[currentId]), config);
+        colorChartSidebar.updateStats(chart.getStats());
     }
 
     var updater = {
@@ -32,10 +33,12 @@ function ButterflyEffect(dataReader) {
             updateChart(currentId);
         },
         loadAllSystems: function () {
-            chart.update(dataReader.getOverallButterflyEffect(), config)
+            chart.update(dataReader.getOverallButterflyEffect(), config);
+            ColorChartSidebar.updateStats(chart.getStats());
         },
         update: null,
-        updateButton: updateButton
+        updateButton: updateButton,
+        config: config
     };
     updateButton.click(updater.update);
 

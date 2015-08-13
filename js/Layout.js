@@ -20,6 +20,13 @@ var Layout = (function () {
         w2ui.layout.get("main").tabs.refresh();
     }
 
+    function createLoadCallback(cb) {
+        return function () {
+            w2ui.layout.hide('top', true);
+            cb();
+        }
+    }
+
     function initW2Layout(callback) {
         $("body").w2layout({
             name: 'layout',
@@ -33,7 +40,7 @@ var Layout = (function () {
                         type: 'button',
                         id: 'loadButton',
                         caption: 'Load',
-                        onClick: callback
+                        onClick: createLoadCallback(callback)
                             }, {
                         type: 'html',
                         id: 'file',
@@ -114,7 +121,6 @@ var Layout = (function () {
     var getSelectedDatabase = function () {
         return $("#dropdown option:selected").text();;
     };
-
 
     return {
         init: initW2Layout,

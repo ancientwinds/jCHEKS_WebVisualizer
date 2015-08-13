@@ -18,10 +18,11 @@ function nbOccurrences_LevelVariation(dataReader) {
     }
 
     function updateChart(currentId) {
-        chart.update(dataReader.getVariationOccurences(systemIds[currentId]), config)
+        chart.update(dataReader.getVariationOccurences(systemIds[currentId]), config);
+        colorChartSidebar.updateStats(chart.getStats());
     }
 
-    var chart = Chart.colorChart(dataReader.getVariationOccurences(systemIds[0]), config);
+    var chart = Chart.ColorChart(dataReader.getVariationOccurences(systemIds[0]), config);
 
     var updater = {
         loadASystem: function (currentId) {
@@ -29,10 +30,12 @@ function nbOccurrences_LevelVariation(dataReader) {
             updateChart(currentId);
         },
         loadAllSystems: function () {
-            chart.update(dataReader.getOverallVariationOccurences(), config)
+            chart.update(dataReader.getOverallVariationOccurences(), config);
+            colorChartSidebar.updateStats(chart.getStats());
         },
         update: null,
-        updateButton: updateButton
+        updateButton: updateButton,
+config: config
     };
 
     updateButton.click(updater.update);

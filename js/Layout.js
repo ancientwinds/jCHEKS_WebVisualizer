@@ -58,7 +58,7 @@ var Layout = (function () {
 
         $.ajax({
             url: "../php/getDatabaseNames.php",
-            type: "POST",
+            type: 'GET',
             dataType: 'json',
             async: false,
             success: function (data2) {

@@ -1,6 +1,10 @@
 <?php
     include("db/db.php"); 
     header('Content-type: application/json');
+    header('Access-Control-Allow-Origin: '.$_SERVER['HTTP_ORIGIN']);
+    header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
+    header('Access-Control-Max-Age: 1000');
+    header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
     function getData($type, $systemId, $databaseName, $limit, $limitedRow, $overallColumn) {
         $db = new DatabaseManager($databaseName, $limit, $limitedRow);
         if(!$db) {
@@ -73,11 +77,11 @@
     $limit = "";
     $limitedRow = "";
     $overallColumn = "";
-    if(isset($_POST["type"])) $type = $_POST["type"];
-    if(isset($_POST["system"])) $system = $_POST["system"];
-    if(isset($_POST["name"])) $name = $_POST["name"];
-    if(isset($_POST["limit"])) $limit = $_POST["limit"];
-    if(isset($_POST["limitedRow"])) $limitedRow = $_POST["limitedRow"];
-    if(isset($_POST["overallColumn"])) $overallColumn = $_POST["overallColumn"];
+    if(isset($_GET["type"])) $type = $_GET["type"];
+    if(isset($_GET["system"])) $system = $_GET["system"];
+    if(isset($_GET["name"])) $name = $_GET["name"];
+    if(isset($_GET["limit"])) $limit = $_GET["limit"];
+    if(isset($_GET["limitedRow"])) $limitedRow = $_GET["limitedRow"];
+    if(isset($_GET["overallColumn"])) $overallColumn = $_GET["overallColumn"];
 
     getData($type, $system, $name, $limit, $limitedRow, $overallColumn);

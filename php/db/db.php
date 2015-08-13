@@ -1,4 +1,6 @@
-<?php class DatabaseManager {
+<?php 
+
+class DatabaseManager {
     var $db = null;
     function __construct($name, $limit = "" , $limitedRow) {
         $this->limitedRow = $limitedRow;
@@ -9,8 +11,6 @@
         }
         $this->db = new PDO("sqlite:databases/" . $name);
         $this->db->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
-        ini_set('memory_limit', '256M');
-        set_time_limit(300);
     }
     
     function getDataForASystemFromTableInDatabase($table, $systemId){

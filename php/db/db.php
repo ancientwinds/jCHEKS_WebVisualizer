@@ -39,9 +39,8 @@ class DatabaseManager {
     
     function getOverallOccurenceData($table, $overallColumn){
         if(!$this->secureNumeric($this->baselimit)){echo "Invalid limit.";}
-        if(!$this->secureAlpha($this->limitedRow)){echo "Invalid column name.";}
-        $this->limit = str_replace("AND","WHERE",$this->limit);
-       $statement = $this->db->prepare("SELECT *, sum(".$overallColumn.") AS system FROM '".$this->secureAlpha($table)."' ".$this->limit."GROUP BY chaotic_system_id, ".$this->limitedRow);
+        $this->limit = str_replace("LIMIT","",$this->limit);
+       $statement = $this->db->prepare("SELECT * FROM '".$this->secureAlpha($table)."' groupIndex<".$this->limit."GROUP BY chaotic_system_id, groupIndex");
         $statement->setFetchMode(PDO::FETCH_ASSOC);
         if(!$statement->execute()) return null;
         return $statement->fetchAll();

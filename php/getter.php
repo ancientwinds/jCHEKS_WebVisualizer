@@ -63,13 +63,13 @@
                 echo json_encode($db->getSystemsNamesInTable("distance_between_evolution"));
                 break;
             case "overallOccurenceVariation":
-                echo json_encode($db->getOverallOccurenceData("nbOccurrences_levelVariation"));
+                echo json_encode($db->getOverallOccurenceData("overall_nbOccurrences_levelVariation"));
                 break;
             case "overallOccurenceLevel":
-                echo json_encode($db->getOverallOccurenceData("nbOccurrences_level"));
+                echo json_encode($db->getOverallOccurenceData("overall_nbOccurrences_level"));
                 break;
             case "overallButterfly":
-                echo json_encode($db->getOverallOccurenceData("butterfly_effect"));
+                echo json_encode($db->getOverallOccurenceData("overall_butterfly_effect"));
                 break;
         }
     }

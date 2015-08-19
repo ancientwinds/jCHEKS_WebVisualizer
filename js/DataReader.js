@@ -73,8 +73,8 @@ var DataReader = function (databaseName) {
             shared.formatedObject = {
                 systemId: receivedData[i].chaotic_system_id,
                 y: yValue,
-                x: parseInt(receivedData[i].variation),
-                color: parseInt(receivedData[i].system)
+                x: parseInt(receivedData[i].groupIndex),
+                color: parseInt(receivedData[i].overallSum)
 
             };
             shared.dataArray.push(shared.formatedObject);
@@ -92,8 +92,8 @@ var DataReader = function (databaseName) {
             shared.formatedObject = {
                 systemId: receivedData[i].chaotic_system_id,
                 y: yValue,
-                x: parseInt(receivedData[i].evolution_count),
-                color: parseInt(receivedData[i].system)
+                x: parseInt(receivedData[i].groupIndex),
+                color: parseInt(receivedData[i].overallSum)
 
             };
             shared.dataArray.push(shared.formatedObject);
@@ -150,8 +150,6 @@ var DataReader = function (databaseName) {
         return self.sendDataRequest({
             formatter: overallOccurrenceDataFormatter,
             type: "overallOccurenceLevel",
-            limitedRow: "variation",
-            overallColumn: "occurence_count"
         });
     };
 
@@ -159,8 +157,6 @@ var DataReader = function (databaseName) {
         return self.sendDataRequest({
             formatter: overallOccurrenceDataFormatter,
             type: "overallOccurenceVariation",
-            limitedRow: "variation",
-            overallColumn: "occurence_count"
         });
     };
 
@@ -168,8 +164,6 @@ var DataReader = function (databaseName) {
         return self.sendDataRequest({
             formatter: overallButterflyFormatter,
             type: "overallButterfly",
-            limitedRow: "evolution_count",
-            overallColumn: "distance"
         });
     };
 

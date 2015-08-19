@@ -37,10 +37,10 @@ class DatabaseManager {
         return $statement->fetchAll();
     }
     
-    function getOverallOccurenceData($table, $overallColumn){
+    function getOverallOccurenceData($table){
         if(!$this->secureNumeric($this->baselimit)){echo "Invalid limit.";}
         $this->limit = str_replace("LIMIT","",$this->limit);
-       $statement = $this->db->prepare("SELECT * FROM '".$this->secureAlpha($table)."' groupIndex<".$this->limit."GROUP BY chaotic_system_id, groupIndex");
+       $statement = $this->db->prepare("SELECT * FROM '".$this->secureAlpha($table)."' GROUP BY chaotic_system_id, groupIndex");
         $statement->setFetchMode(PDO::FETCH_ASSOC);
         if(!$statement->execute()) return null;
         return $statement->fetchAll();

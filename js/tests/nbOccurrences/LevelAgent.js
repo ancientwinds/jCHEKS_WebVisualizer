@@ -11,6 +11,8 @@ function nbOccurrences_LevelAgent(dataReader) {
         width: Layout.getContainerWidth(),
         target: id + "Svg",
         yAxisTitle: "Agent",
+        overall_yAxisTitle: "System",
+        yAxisToUse: "specific",
         xAxisTitle: "Level",
         chartTitle: "Occurence of agent levels"
     };

@@ -11,8 +11,10 @@ function ButterflyEffect(dataReader) {
         height: Layout.getContainerHeight(),
         width: Layout.getContainerWidth(),
         target: id + "Svg",
-        yAxisTitle: "System",
+        yAxisTitle: "Clone",
+        overall_yAxisTitle: "System",
         xAxisTitle: "Evolution",
+        yAxisToUse: "specific",
         chartTitle: "Distance (Butterfly)"
     };
 

@@ -9,6 +9,8 @@ function nbOccurrences_LevelVariation(dataReader) {
         width: Layout.getContainerWidth(),
         target: id + "Svg",
         yAxisTitle: "Agent",
+        overall_yAxisTitle: "System",
+        yAxisToUse: "specific",
         xAxisTitle: "Variation",
         chartTitle: "Occurrences of level variation"
     };
@@ -35,7 +37,7 @@ function nbOccurrences_LevelVariation(dataReader) {
         },
         update: null,
         updateButton: updateButton,
-config: config
+        config: config
     };
 
     updateButton.click(updater.update);

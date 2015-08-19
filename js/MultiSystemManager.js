@@ -41,20 +41,20 @@ var MultiSystemManager = function (systemIds, updater) {
     var onSwitchClick = function () {
         if (isOverall) {
             isOverall = false;
+            updater.config.yAxisToUse = "specific";
             updater.loadASystem(currentSpecificId);
             updater.update = update;
             navButtons.show();
             switchButton.text("Switch to overall");
-            updater.config.yAxisTitle = "Agent";
             updater.updateButton.click(updater.update);
         } else {
             isOverall = true;
             navButtons.hide();
+            updater.config.yAxisToUse = "overall";
             updater.loadAllSystems();
             updater.update = updater.loadAllSystems;
             switchButton.text("Switch to specific");
             updater.updateButton.click(updater.update);
-            updater.config.yAxisTitle = "System";
             systemName.text("All systems");
         }
     }

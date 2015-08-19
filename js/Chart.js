@@ -42,6 +42,7 @@ var Chart = (function () {
 
     function createYLabel(chartElement, text, padding) {
         chartElement.append('g')
+            .classed("label", true)
             .attr('transform', 'translate( ' + (padding / 2) + ', ' + (padding * 2) + ')')
             .append('text')
             .attr('text-anchor', 'middle')
@@ -51,6 +52,7 @@ var Chart = (function () {
 
     function createXLabel(chartElement, text, padding) {
         chartElement.append('g')
+            .classed("label", true)
             .attr('transform', 'translate( ' + (padding + 10) + ', ' + (padding / 2) + ')')
             .append('text')
             .text(text);
@@ -347,7 +349,7 @@ var Chart = (function () {
             $("#" + targetId).width((width < targetWidth) ? targetWidth - padding : width);
             $("#" + targetId).height((height < targetWidth) ? targetWidth : height);
 
-            yAxisTitle = config.yAxisTitle || "Y axis";
+            yAxisTitle = (config.yAxisToUse === "specific") ? config.yAxisTitle || "Y axis" : config.overall_yAxisTitle || "Y axis";
             xAxisTitle = config.xAxisTitle || "X axis";
             chartTitle = config.chartTitle || "Color Chart";
         }
@@ -444,10 +446,14 @@ var Chart = (function () {
             if (!yAxisElement) {
                 createAxisElement();
                 createTitle(chart, chartTitle, padding);
-                createYLabel(chart, yAxisTitle, padding);
-                createXLabel(chart, xAxisTitle, padding);
+
             }
+
             updateAxisElement();
+
+            chart.selectAll("g.label").remove();
+            createYLabel(chart, yAxisTitle, padding);
+            createXLabel(chart, xAxisTitle, padding);
 
             var elements = chart.selectAll("rect").data(data);
 

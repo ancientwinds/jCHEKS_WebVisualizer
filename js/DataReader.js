@@ -3,7 +3,8 @@ var DataReader = function (databaseName) {
     shared.dataArray = [];
     shared.formatedObject = {};
     shared.counter = 0;
-    var defaultLimit = 150;
+    var defaultLimit = 500;
+
     function resetDataArray() {
         shared.dataArray = [];
     }
@@ -11,9 +12,9 @@ var DataReader = function (databaseName) {
     var self = {};
 
     self.sendDataRequest = function (config) {
-        config.limit = (config.limit) ? config.limit: defaultLimit;
+        config.limit = (config.limit) ? config.limit : defaultLimit;
         resetDataArray();
-        var dataToSend= "";
+        var dataToSend = "";
         dataToSend += ((config.system) ? "&system=" + config.system : "");
         dataToSend += ((config.limit) ? "&limit=" + config.limit : "");
         dataToSend += ((config.limitedRow) ? "&limitedRow=" + config.limitedRow : "");
@@ -21,7 +22,7 @@ var DataReader = function (databaseName) {
         dataToSend += "&type=" + config.type;
         dataToSend += "&name=" + databaseName;
 
-        console.log(dataToSend.replace("&","").split("&").join(",   ").split("=").join(" = "));
+        console.log(dataToSend.replace("&", "").split("&").join(",   ").split("=").join(" = "));
         $.ajax({
             url: "../php/getter.php",
             type: "POST",
@@ -61,11 +62,11 @@ var DataReader = function (databaseName) {
         }
     };
 
-    var overallOccurrenceDataFormatter =function (receivedData) {
+    var overallOccurrenceDataFormatter = function (receivedData) {
         var name;
         var yValue = -1;
         for (var i = 0; i < receivedData.length; i++) {
-            if(receivedData[i].chaotic_system_id!=name){
+            if (receivedData[i].chaotic_system_id != name) {
                 yValue++;
                 name = receivedData[i].chaotic_system_id;
             }
@@ -80,11 +81,11 @@ var DataReader = function (databaseName) {
         }
     };
 
-    var overallButterflyFormatter =function (receivedData) {
+    var overallButterflyFormatter = function (receivedData) {
         var name;
         var yValue = -1;
         for (var i = 0; i < receivedData.length; i++) {
-            if(receivedData[i].chaotic_system_id!=name){
+            if (receivedData[i].chaotic_system_id != name) {
                 yValue++;
                 name = receivedData[i].chaotic_system_id;
             }
@@ -146,39 +147,80 @@ var DataReader = function (databaseName) {
     };
 
     self.getOverallLevelOccurences = function () {
-        return self.sendDataRequest({ formatter: overallOccurrenceDataFormatter, type: "overallOccurenceLevel", limitedRow: "variation", overallColumn: "occurence_count"});
+        return self.sendDataRequest({
+            formatter: overallOccurrenceDataFormatter,
+            type: "overallOccurenceLevel",
+            limitedRow: "variation",
+            overallColumn: "occurence_count"
+        });
     };
 
     self.getOverallVariationOccurences = function () {
-        return self.sendDataRequest({ formatter: overallOccurrenceDataFormatter, type: "overallOccurenceVariation", limitedRow: "variation", overallColumn: "occurence_count"});
+        return self.sendDataRequest({
+            formatter: overallOccurrenceDataFormatter,
+            type: "overallOccurenceVariation",
+            limitedRow: "variation",
+            overallColumn: "occurence_count"
+        });
     };
 
     self.getOverallButterflyEffect = function () {
-        return self.sendDataRequest({ formatter: overallButterflyFormatter, type: "overallButterfly", limitedRow: "evolution_count", overallColumn: "distance"});
+        return self.sendDataRequest({
+            formatter: overallButterflyFormatter,
+            type: "overallButterfly",
+            limitedRow: "evolution_count",
+            overallColumn: "distance"
+        });
     };
 
     self.getAllKeybits = function () {
-        return self.sendDataRequest({formatter: evolutionDataFormatter, type: "keyBits"});
+        return self.sendDataRequest({
+            formatter: evolutionDataFormatter,
+            type: "keyBits"
+        });
     };
 
     self.getAllLevelAgent = function () {
-        return self.sendDataRequest({formatter: evolutionDataFormatter, type: "agentLevels"});
+        return self.sendDataRequest({
+            formatter: evolutionDataFormatter,
+            type: "agentLevels"
+        });
     };
 
     self.getLevelOccurences = function (systemId) {
-        return self.sendDataRequest({formatter: occurrenceDataFormatter, type: "occurenceLevel", system: systemId, limitedRow: "variation"});
+        return self.sendDataRequest({
+            formatter: occurrenceDataFormatter,
+            type: "occurenceLevel",
+            system: systemId,
+            limitedRow: "variation"
+        });
     };
 
     self.getVariationOccurences = function (systemId) {
-        return self.sendDataRequest({ formatter: occurrenceDataFormatter, type: "occurenceVariation", system: systemId, limitedRow: "variation"});
+        return self.sendDataRequest({
+            formatter: occurrenceDataFormatter,
+            type: "occurenceVariation",
+            system: systemId,
+            limitedRow: "variation"
+        });
     };
 
     self.getButterflyEffect = function (systemId) {
-        return self.sendDataRequest({formatter: butterflyDataFormatter, type: "butterfly", system: systemId, limitedRow: "evolution_count"});
+        return self.sendDataRequest({
+            formatter: butterflyDataFormatter,
+            type: "butterfly",
+            system: systemId,
+            limitedRow: "evolution_count"
+        });
     };
 
     self.getDistanceEvolutionForASystem = function (systemId) {
-        return self.sendDataRequest({formatter: distanceDataFormatter, type: "distanceEvolution", system: systemId,  limit: 150});
+        return self.sendDataRequest({
+            formatter: distanceDataFormatter,
+            type: "distanceEvolution",
+            system: systemId,
+            limit: 150
+        });
     };
 
     self.getDistanceEvolution = function () {
@@ -192,31 +234,82 @@ var DataReader = function (databaseName) {
 
     self.getNist = function () {
         var allNistData = [];
-        shared.counter = 1;
-        allNistData = allNistData.concat(self.sendDataRequest({formatter: NISTDataFormatter, type: "nist1"}));
+        shared.counter = 0;
+        allNistData = allNistData.concat(self.sendDataRequest({
+            formatter: NISTDataFormatter,
+            type: "nist1"
+        }));
+
         shared.counter++;
-        allNistData = allNistData.concat(self.sendDataRequest({formatter: NISTDataFormatter, type: "nist2"}));
+        allNistData = allNistData.concat(self.sendDataRequest({
+            formatter: NISTDataFormatter,
+            type: "nist2"
+        }));
+
         shared.counter++;
-        allNistData = allNistData.concat(self.sendDataRequest({formatter: NISTDataFormatter, type: "nist3"}));
+        allNistData = allNistData.concat(self.sendDataRequest({
+            formatter: NISTDataFormatter,
+            type: "nist3"
+        }));
+
         shared.counter++;
-        allNistData = allNistData.concat(self.sendDataRequest({formatter: NISTDataFormatter, type: "nist4"}));
+        allNistData = allNistData.concat(self.sendDataRequest({
+            formatter: NISTDataFormatter,
+            type: "nist4"
+        }));
+
+        shared.counter++;
+        allNistData = allNistData.concat(self.sendDataRequest({
+            formatter: NISTDataFormatter,
+            type: "nist5"
+        }));
+
+        shared.counter++;
+        allNistData = allNistData.concat(self.sendDataRequest({
+            formatter: NISTDataFormatter,
+            type: "nist9"
+        }));
+
+        shared.counter++;
+        allNistData = allNistData.concat(self.sendDataRequest({
+            formatter: NISTDataFormatter,
+            type: "nist10"
+        }));
+
+        shared.counter++;
+        allNistData = allNistData.concat(self.sendDataRequest({
+            formatter: NISTDataFormatter,
+            type: "nist12"
+        }));
         return allNistData;
     };
 
     self.getSystemNamesForDistanceEvolution = function () {
-        return self.sendDataRequest({ formatter: nameListFormatter, type: "namesForDistanceEvolution"});
+        return self.sendDataRequest({
+            formatter: nameListFormatter,
+            type: "namesForDistanceEvolution"
+        });
     };
 
     self.getSystemNamesForLevel = function () {
-        return self.sendDataRequest({formatter: nameListFormatter, type: "levelsName"});
+        return self.sendDataRequest({
+            formatter: nameListFormatter,
+            type: "levelsName"
+        });
     };
 
     self.getSystemNamesForLevelVariation = function () {
-        return self.sendDataRequest({formatter: nameListFormatter, type: "levelsVariationName"});
+        return self.sendDataRequest({
+            formatter: nameListFormatter,
+            type: "levelsVariationName"
+        });
     };
 
     self.getSystemNamesForButterflyEffect = function () {
-        return self.sendDataRequest({formatter: nameListFormatter, type: "butterflyName"});
+        return self.sendDataRequest({
+            formatter: nameListFormatter,
+            type: "butterflyName"
+        });
     };
 
     return self;

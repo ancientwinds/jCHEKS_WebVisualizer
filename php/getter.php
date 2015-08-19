@@ -32,6 +32,18 @@
             case "nist4":
                 echo json_encode($db->getDataOfAllSystemsFromTableInDatabase("LongestRun_NIST_4"));
                 break;
+            case "nist5":
+                echo json_encode($db->getDataOfAllSystemsFromTableInDatabase("Binary_Matrix_Rank_NIST_5"));
+                break;
+            case "nist9":
+                echo json_encode($db->getDataOfAllSystemsFromTableInDatabase("Maurers_Universal_Statistical_NIST_9"));
+                break;
+            case "nist10":
+                echo json_encode($db->getDataOfAllSystemsFromTableInDatabase("Linear_Complexity_NIST_10"));
+                break;
+            case "nist12":
+                echo json_encode($db->getDataOfAllSystemsFromTableInDatabase("Approximate_Entropy_NIST_12"));
+                break;
             case "butterflyName":
                 echo json_encode($db->getSystemsNamesInTable("butterfly_effect"));
                 break;

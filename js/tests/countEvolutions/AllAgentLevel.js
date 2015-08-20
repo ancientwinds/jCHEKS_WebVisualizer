@@ -3,6 +3,9 @@
         var id = "allLevelAgent";
         Layout.addTab(id, "AllLevelAgent");
         var barChartSidebar = BarChartSidebar(id);
+        function getData(){
+            return dataReader.sendDataRequest({formatter: evolutionDataFormatter,type: "agentLevels"})
+        }
         var config = {
             height: Layout.getContainerHeight(),
             width: Layout.getContainerWidth(),
@@ -12,15 +15,14 @@
             chartTitle: "Evolutions to see all agent levels"
         }
 
-        var chart = Chart.BarChart(dataReader.getAllLevelAgent(), config);
-
+        var chart = Chart.BarChart(getData(), config);
 
         function updateConfig() {
-            barChartSidebar.updateConfigs(config);
+            barChartSidebar.updateConfigs(getData(), config);
         }
 
         function updateChart() {
-            chart.update(dataReader.getAllLevelAgent(), config);
+            chart.update(, config);
             barChartSidebar.updateStats(chart.getStats());
         }
 

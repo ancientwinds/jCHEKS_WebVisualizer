@@ -1,6 +1,6 @@
 function nbOccurrences_LevelVariation(dataReader) {
     var id = "levelVariation";
-    var systemIds = dataReader.getSystemNamesForLevelVariation();
+    var systemIds = dataReader.getSystemNameForAType("levelsVariationName");
     var updateButton = $("<button>").text("update");
     Layout.addTab(id, "Nb occurrences Level Variation");
     var colorChartSidebar = ColorChartSidebar(id);
@@ -14,7 +14,9 @@ function nbOccurrences_LevelVariation(dataReader) {
         xAxisTitle: "Variation",
         chartTitle: "Occurrences of level variation"
     };
-
+    function getData(){
+        return dataReader;
+    }
     function updateConfig() {
         colorChartSidebar.updateConfigs(config);
     }

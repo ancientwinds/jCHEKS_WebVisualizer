@@ -1,5 +1,5 @@
 function ButterflyEffect(dataReader) {
-    var systemIds = dataReader.getSystemNamesForButterflyEffect();
+    var systemIds = dataReader.getSystemNameForAType("butterflyName");
 
     var id = "butterfly";
     var updateButton = $("<button>").text("update");
@@ -17,7 +17,9 @@ function ButterflyEffect(dataReader) {
         yAxisToUse: "specific",
         chartTitle: "Distance (Butterfly)"
     };
-
+    function getData(){
+        return dataReader.;
+    }
     var chart = Chart.ColorChart(dataReader.getButterflyEffect(systemIds[0]), config);
 
     function updateConfig() {

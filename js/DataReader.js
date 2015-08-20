@@ -38,7 +38,7 @@ var DataReader = function (databaseName) {
         return shared.dataArray.slice();
     }
 
-    var evolutionDataFormatter = function (receivedData) {
+    self.evolutionDataFormatter = function (receivedData) {
         for (var i = 0; i < receivedData.length; i++) {
             shared.formatedObject = {
                 systemId: receivedData[i].chaotic_system_id,
@@ -48,7 +48,7 @@ var DataReader = function (databaseName) {
         }
     };
 
-    var occurrenceDataFormatter = function (receivedData) {
+    self.occurrenceDataFormatter = function (receivedData) {
         for (var i = 0; i < receivedData.length; i++) {
             shared.formatedObject = {
                 systemId: receivedData[i].chaotic_system_id,
@@ -61,7 +61,7 @@ var DataReader = function (databaseName) {
         }
     };
 
-    var overallOccurrenceDataFormatter = function (receivedData) {
+    self.overallOccurrenceDataFormatter = function (receivedData) {
         var name;
         var yValue = -1;
         for (var i = 0; i < receivedData.length; i++) {
@@ -80,7 +80,7 @@ var DataReader = function (databaseName) {
         }
     };
 
-    var overallButterflyFormatter = function (receivedData) {
+    self.overallButterflyFormatter = function (receivedData) {
         var name;
         var yValue = -1;
         for (var i = 0; i < receivedData.length; i++) {
@@ -99,7 +99,7 @@ var DataReader = function (databaseName) {
         }
     };
 
-    var butterflyDataFormatter = function (receivedData) {
+    self.butterflyDataFormatter = function (receivedData) {
         for (var i = 0; i < receivedData.length; i++) {
             shared.formatedObject = {
                 systemId: receivedData[i].chaotic_system_id,
@@ -111,7 +111,7 @@ var DataReader = function (databaseName) {
         }
     }
 
-    var NISTDataFormatter = function (receivedData) {
+    self.NISTDataFormatter = function (receivedData) {
         for (var i = 0; i < receivedData.length; i++) {
             shared.formatedObject = {
                 systemId: receivedData[i].chaotic_system_id,
@@ -123,7 +123,7 @@ var DataReader = function (databaseName) {
         }
     }
 
-    var distanceDataFormatter = function (data2) {
+    self.distanceDataFormatter = function (data2) {
         for (var i = 0; i < data2.length; i++) {
             shared.formatedObject = {
                 systemId: data2[i].chaotic_system_id,
@@ -135,15 +135,11 @@ var DataReader = function (databaseName) {
         }
     }
 
-    var nameListFormatter = function (receivedData) {
+    self.nameListFormatter = function (receivedData) {
         for (var i = 0; i < receivedData.length; i++) {
             shared.dataArray.push(receivedData[i].chaotic_system_id);
         }
     }
-
-    self.getKeyRepetitions = function () {
-        console.error("Datareader.getKeyRepetitions() Not implemented.");
-    };
 
     self.getOverallLevelOccurences = function () {
         return self.sendDataRequest({
@@ -163,20 +159,6 @@ var DataReader = function (databaseName) {
         return self.sendDataRequest({
             formatter: overallButterflyFormatter,
             type: "overallButterfly",
-        });
-    };
-
-    self.getAllKeybits = function () {
-        return self.sendDataRequest({
-            formatter: evolutionDataFormatter,
-            type: "keyBits"
-        });
-    };
-
-    self.getAllLevelAgent = function () {
-        return self.sendDataRequest({
-            formatter: evolutionDataFormatter,
-            type: "agentLevels"
         });
     };
 
@@ -200,7 +182,7 @@ var DataReader = function (databaseName) {
 
     self.getButterflyEffect = function (systemId) {
         return self.sendDataRequest({
-            formatter: butterflyDataFormatter,
+            formatter: occurrenceDataFormatter,
             type: "butterfly",
             system: systemId,
             limitedRow: "evolution_count"
@@ -226,78 +208,14 @@ var DataReader = function (databaseName) {
     };
 
     self.getNist = function () {
-        var allNistData = [];
-        shared.counter = 0;
-        allNistData = allNistData.concat(self.sendDataRequest({
-            formatter: NISTDataFormatter,
-            type: "nist1"
-        }));
 
-        shared.counter++;
-        allNistData = allNistData.concat(self.sendDataRequest({
-            formatter: NISTDataFormatter,
-            type: "nist2"
-        }));
-
-        shared.counter++;
-        allNistData = allNistData.concat(self.sendDataRequest({
-            formatter: NISTDataFormatter,
-            type: "nist3"
-        }));
-
-        shared.counter++;
-        allNistData = allNistData.concat(self.sendDataRequest({
-            formatter: NISTDataFormatter,
-            type: "nist4"
-        }));
-
-        shared.counter++;
-        allNistData = allNistData.concat(self.sendDataRequest({
-            formatter: NISTDataFormatter,
-            type: "nist5"
-        }));
-
-        shared.counter++;
-        allNistData = allNistData.concat(self.sendDataRequest({
-            formatter: NISTDataFormatter,
-            type: "nist9"
-        }));
-
-        shared.counter++;
-        allNistData = allNistData.concat(self.sendDataRequest({
-            formatter: NISTDataFormatter,
-            type: "nist10"
-        }));
-        return allNistData;
     };
 
-    self.getSystemNamesForDistanceEvolution = function () {
+    self.getSystemNameForAType(type){
         return self.sendDataRequest({
             formatter: nameListFormatter,
-            type: "namesForDistanceEvolution"
+            type: type
         });
-    };
-
-    self.getSystemNamesForLevel = function () {
-        return self.sendDataRequest({
-            formatter: nameListFormatter,
-            type: "levelsName"
-        });
-    };
-
-    self.getSystemNamesForLevelVariation = function () {
-        return self.sendDataRequest({
-            formatter: nameListFormatter,
-            type: "levelsVariationName"
-        });
-    };
-
-    self.getSystemNamesForButterflyEffect = function () {
-        return self.sendDataRequest({
-            formatter: nameListFormatter,
-            type: "butterflyName"
-        });
-    };
-
+    }
     return self;
 };

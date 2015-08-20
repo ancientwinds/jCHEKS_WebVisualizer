@@ -11,14 +11,17 @@
             xAxisTitle: "Evolutions",
             chartTitle: "Evolutions to see all bits of key"
         };
-        var chart = Chart.BarChart(dataReader.getAllKeybits(), config);
+        function getData(){
+            dataReader.sendDataRequest({formatter: evolutionDataFormatter,type: "keyBits"});
+        }
+        var chart = Chart.BarChart(getData(), config);
 
         function updateConfig() {
             barChartSidebar.updateConfigs(config);
         }
 
         function updateChart() {
-            chart.update(dataReader.getAllKeybits(), config);
+            chart.update(getData(), config);
             barChartSidebar.updateStats(chart.getStats());
         }
 

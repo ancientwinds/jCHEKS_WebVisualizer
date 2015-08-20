@@ -1,6 +1,6 @@
 function nbOccurrences_LevelAgent(dataReader) {
 
-    var systemIds = dataReader.getSystemNamesForLevel();
+    var systemIds = dataReader.getSystemNameForAType("levelsName");
     var id = "levelAgent"
     Layout.addTab(id, "Nb Occurences LevelAgent");
     var updateButton = $("<button>").text("update");
@@ -17,7 +17,9 @@ function nbOccurrences_LevelAgent(dataReader) {
         chartTitle: "Occurence of agent levels"
     };
 
-
+    function getData(){
+        return dataReader;
+    }
     function updateChart(currentId) {
         chart.update(dataReader.getLevelOccurences(systemIds[currentId]), config);
         colorChartSidebar.updateStats(chart.getStats());

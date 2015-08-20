@@ -311,7 +311,12 @@ var Chart = (function () {
         var chartTitle;
         var minRange;
         var maxRange;
-
+        var blackMinRange;
+        var blackMaxRange;
+        var whiteMinRange;
+        var whiteMaxRange;
+        var greyMinRange;
+        var greyMaxRange;
 
         var xAccessor = function (d) {
             return d.x;
@@ -341,7 +346,30 @@ var Chart = (function () {
                 minRange = 0;
                 maxRange = 330;
             }
+            if(config.black){
+                blackMinRange = Number(config.black.min);
+                blackMaxRange = Number(config.black.max);
+            } else{
+                blackMinRange = null;
+                blackMaxRange = null;
+            }
 
+            if(config.white){
+                whiteMinRange = Number(config.white.min);
+                whiteMaxRange = Number(config.white.max);
+            } else{
+                whiteMinRange = null;
+                whiteMaxRange = null;
+            }
+
+            if(config.grey){
+                greyMinRange = Number(config.grey.min);
+                greyMaxRange = Number(config.grey.max);
+            } else{
+                greyMinRange = null;
+                greyMaxRange = null;
+            }
+            console.log(blackMinRange, blackMaxRange);
             chart = d3.select("#" + targetId);
             elementSize = config.elementSize || 5;
             var width = (elementSize * maxX + padding * 2);
@@ -469,6 +497,21 @@ var Chart = (function () {
                 width: elementSize,
                 height: elementSize,
                 fill: function (d, i) {
+                    if(blackMinRange != null && blackMaxRange != null){
+                        if(d.color>=Number(blackMinRange) && d.color<=Number(blackMaxRange)){
+                            return "black";
+                        }
+                    }
+                    if(whiteMinRange != null && whiteMaxRange != null){
+                        if(d.color>=Number(whiteMinRange) && d.color<=Number(whiteMaxRange)){
+                            return "white";
+                        }
+                    }
+                    if(greyMinRange != null && greyMaxRange != null){
+                        if(d.color>=Number(greyMinRange) && d.color<=Number(greyMaxRange)){
+                            return "grey";
+                        }
+                    }
                     return "hsl(" + colorScale(d.color) + ", 100%, 50%)";
                 }
             });

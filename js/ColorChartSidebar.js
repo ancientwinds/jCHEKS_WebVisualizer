@@ -21,8 +21,16 @@ var ColorChartSidebar = function (mainId) {
     sidebar.white.max = null; // Not implemented
 
     sidebar.black = {};
-    sidebar.black.max = null; // Not implemented
-    sidebar.black.min = null; // Not implemented
+    sidebar.black.maxInput = createScaleInput("BlackMinRange", "Max");
+    sidebar.black.minInput = createScaleInput("BlackMinRange", "Min");
+
+    sidebar.grey = {};
+    sidebar.grey.maxInput = createScaleInput("GreyMinRange", "Max");
+    sidebar.grey.minInput = createScaleInput("GreyMinRange", "Min");
+
+    sidebar.white = {};
+    sidebar.white.maxInput = createScaleInput("WhiteMinRange", "Max");
+    sidebar.white.minInput = createScaleInput("WhiteMinRange", "Min");
 
     sidebar.stats = $("<div>");
 
@@ -33,7 +41,21 @@ var ColorChartSidebar = function (mainId) {
         configToUpdate.scale.maxDomain = sidebar.scale.maxDomainInput.children().eq(1).val();
         configToUpdate.scale.minRange = sidebar.scale.minRangeInput.children().eq(1).val();
         configToUpdate.scale.maxRange = sidebar.scale.maxRangeInput.children().eq(1).val();
+
+        configToUpdate.black = {};
+        configToUpdate.black.max = sidebar.black.maxInput.children().eq(1).val();
+        configToUpdate.black.min = sidebar.black.minInput.children().eq(1).val();
+
+        configToUpdate.grey = {};
+        configToUpdate.grey.max = sidebar.grey.maxInput.children().eq(1).val();
+        configToUpdate.grey.min = sidebar.grey.minInput.children().eq(1).val();
+
+        configToUpdate.white = {};
+        configToUpdate.white.max = sidebar.white.maxInput.children().eq(1).val();
+        configToUpdate.white.min = sidebar.white.minInput.children().eq(1).val();
+
         configToUpdate.elementSize = sidebar.elementSize.children().eq(1).val();
+
     };
 
     self.getHTML = function () {
@@ -56,6 +78,24 @@ var ColorChartSidebar = function (mainId) {
             .append("<br>")
             .append(sidebar.elementSize)
             .append("<br>")
+            .append("<hr>")
+            .append($("<strong>").text("Black range"))
+            .append("<br>")
+            .append(sidebar.black.minInput)
+            .append("<br>")
+            .append(sidebar.black.maxInput)
+            .append("<hr>")
+            .append($("<strong>").text("Grey range"))
+            .append("<br>")
+            .append(sidebar.grey.minInput)
+            .append("<br>")
+            .append(sidebar.grey.maxInput)
+            .append("<hr>")
+            .append($("<strong>").text("White range"))
+            .append("<br>")
+            .append(sidebar.white.minInput)
+            .append("<br>")
+            .append(sidebar.white.maxInput)
             .append("<hr>")
             .append($("<strong>").text("Stats"))
             .append(sidebar.stats)

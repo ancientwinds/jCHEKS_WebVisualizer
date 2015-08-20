@@ -5,7 +5,7 @@ function KeyRepetition(dataReader) {
     Layout.addTab(id, "KeyRepetition");
     var data = dataReader.getKeyRepetitions();
     if (data) {
-        var x = Chart.createBarChart(data, {
+        var x = Chart.BarChart(data, {
             height: Layout.getContainerHeight(),
             width: Layout.getContainerWidth(),
             target: id + "Svg",

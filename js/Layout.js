@@ -20,6 +20,13 @@ var Layout = (function () {
         w2ui.layout.get("main").tabs.refresh();
     }
 
+    function createLoadCallback(cb) {
+        return function () {
+            w2ui.layout.hide('top', true);
+            cb();
+        }
+    }
+
     function initW2Layout(callback) {
         $("body").w2layout({
             name: 'layout',
@@ -33,7 +40,7 @@ var Layout = (function () {
                         type: 'button',
                         id: 'loadButton',
                         caption: 'Load',
-                        onClick: callback
+                        onClick: createLoadCallback(callback)
                             }, {
                         type: 'html',
                         id: 'file',
@@ -83,7 +90,7 @@ var Layout = (function () {
     }
 
     function addTabSideBar(id) {
-        $("#sidebar").append($("<div class='panel' width='200' height='600' id='" + id + "Sidebar'>" + id + "</div>"));
+        $("#sidebar").append($("<div class='panel' width='200' height='600' id='" + id + "Sidebar'></div>"));
     }
 
     function addTabElement(id, caption) {
@@ -115,10 +122,6 @@ var Layout = (function () {
         return $("#dropdown option:selected").text();;
     };
 
-    var createScaleInput = function (id) {
-        return $("<input>").attr("type", "number").attr("min", "0").attr("id", id);
-    }
-
     return {
         init: initW2Layout,
         addTab: addTab,
@@ -126,6 +129,5 @@ var Layout = (function () {
         getContainerWidth: getContainerWidth,
         getContainerHeight: getContainerHeight,
         getSelectedDatabase: getSelectedDatabase,
-        createScaleInput: createScaleInput
     };
 })();

@@ -17,10 +17,6 @@ svg {
     height: 100%;
 }
 
-#file {
-    width: 300px;
-}
-
 body {
     height: 600px;
     margin: 0;
@@ -45,15 +41,34 @@ svg {
 }
 
 #sidebar {
-    text-align: center;
+    padding: 5%;
 }
 
 button,
 input {
-    width: 90%;
+    width: 50%;
     margin-bottom: 10px;
 }
 
+button {
+    padding: 5px;
+}
+
+.large {
+    width: 100%;
+}
+
 #switcher div button {
-    width: 45%;
+    width: 50%;
+}
+
+.setting {
+    width: 100%;
+}
+
+input {
+    position: absolute;
+    font-size: 10px;
+    height: 16px;
+    right: 5px;
 }

@@ -1,17 +1,13 @@
 <?php
     include("db/db.php"); 
     header('Content-type: application/json');
-    header('Access-Control-Allow-Origin: '.$_SERVER['HTTP_ORIGIN']);
-    header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
-    header('Access-Control-Max-Age: 1000');
-    header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
-    function getData($type, $systemId, $databaseName, $limit, $limitedRow, $overallColumn) {
-        $db = new DatabaseManager($databaseName, $limit, $limitedRow);
+    function getData($configs) {
+        $db = new DatabaseManager($configs["name"], $configs["limit"], $configs["limitedRow"]);
         if(!$db) {
            echo $db->lastErrorMsg();
         }
         
-        switch ($type) {
+        switch ($configs["type"]) {
             case "keyBits" :
                 echo json_encode($db->getDataOfAllSystemsFromTableInDatabase("nbEvolutions_allKeyBits"));
                 break;
@@ -22,12 +18,7 @@
                 echo json_encode($db->getSystemsNamesInTable("nbOccurrences_level"));
                 break; 
             case "occurenceLevel":
-                if($systemId != ""){
-                    echo json_encode($db->getDataForASystemFromTableInDatabase("nbOccurrences_level", $systemId));
-                }
-                else{
-                    echo json_encode($db->getOverallOccurenceData);
-                }
+                echo json_encode($db->getDataForASystemFromTableInDatabase("nbOccurrences_level", $configs["system"]));
                 break;                       
             case "nist1":
                 echo json_encode($db->getDataOfAllSystemsFromTableInDatabase("FrequencyMonobit_NIST_1"));
@@ -41,47 +32,56 @@
             case "nist4":
                 echo json_encode($db->getDataOfAllSystemsFromTableInDatabase("LongestRun_NIST_4"));
                 break;
+            case "nist5":
+                echo json_encode($db->getDataOfAllSystemsFromTableInDatabase("Binary_Matrix_Rank_NIST_5"));
+                break;
+            case "nist9":
+                echo json_encode($db->getDataOfAllSystemsFromTableInDatabase("Maurers_Universal_Statistical_NIST_9"));
+                break;
+            case "nist10":
+                echo json_encode($db->getDataOfAllSystemsFromTableInDatabase("Linear_Complexity_NIST_10"));
+                break;
+            case "nist12":
+                echo json_encode($db->getDataOfAllSystemsFromTableInDatabase("Approximate_Entropy_NIST_12"));
+                break;
             case "butterflyName":
                 echo json_encode($db->getSystemsNamesInTable("butterfly_effect"));
                 break;
             case "butterfly":
-                echo json_encode($db->getDataForASystemFromTableInDatabase("butterfly_effect", $systemId));
+                echo json_encode($db->getDataForASystemFromTableInDatabase("butterfly_effect", $configs["system"]));
                 break;
             case "levelsVariationName":
                 echo json_encode($db->getSystemsNamesInTable("nbOccurrences_levelVariation"));
                 break;
             case "occurenceVariation":
-                echo json_encode($db->getDataForASystemFromTableInDatabase("nbOccurrences_levelVariation", $systemId));
+                echo json_encode($db->getDataForASystemFromTableInDatabase("nbOccurrences_levelVariation", $configs["system"]));
                 break;
             case "distanceEvolution":
-                echo json_encode($db->getDataForASystemFromTableInDatabase("distance_between_evolution", $systemId));
+                echo json_encode($db->getDataForASystemFromTableInDatabase("distance_between_evolution", $configs["system"]));
                 break;
             case "namesForDistanceEvolution":
                 echo json_encode($db->getSystemsNamesInTable("distance_between_evolution"));
                 break;
             case "overallOccurenceVariation":
-                echo json_encode($db->getOverallOccurenceData("nbOccurrences_levelVariation", $overallColumn));
+                echo json_encode($db->getOverallOccurenceData("overall_nbOccurrences_levelVariation"));
                 break;
             case "overallOccurenceLevel":
-                echo json_encode($db->getOverallOccurenceData("nbOccurrences_level", $overallColumn));
+                echo json_encode($db->getOverallOccurenceData("overall_nbOccurrences_level"));
                 break;
             case "overallButterfly":
-                echo json_encode($db->getOverallOccurenceData("butterfly_effect", $overallColumn));
+                echo json_encode($db->getOverallOccurenceData("overall_butterfly"));
                 break;
         }
     }
 
-    $type = "";
-    $system = "";
-    $name = "";
-    $limit = "";
-    $limitedRow = "";
-    $overallColumn = "";
-    if(isset($_GET["type"])) $type = $_GET["type"];
-    if(isset($_GET["system"])) $system = $_GET["system"];
-    if(isset($_GET["name"])) $name = $_GET["name"];
-    if(isset($_GET["limit"])) $limit = $_GET["limit"];
-    if(isset($_GET["limitedRow"])) $limitedRow = $_GET["limitedRow"];
-    if(isset($_GET["overallColumn"])) $overallColumn = $_GET["overallColumn"];
-
-    getData($type, $system, $name, $limit, $limitedRow, $overallColumn);
+    function validateConfigs($configs){
+        $settingNames = array_keys($configs);
+        $result = array();
+        foreach($settingNames as $setting){
+                $result[$setting] = (isset($_GET[$setting]))? $_GET[$setting] : "";
+        }
+        return $result;
+    }
+    $configs = array("type" => "", "system" => "", "name" => "", "limit" => "", "limitedRow" => "", "overallColumn" => "" );
+    $configs = validateConfigs($configs);
+    getData($configs);

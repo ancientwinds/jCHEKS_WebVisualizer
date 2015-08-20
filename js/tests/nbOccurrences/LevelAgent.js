@@ -4,30 +4,30 @@ function nbOccurrences_LevelAgent(dataReader) {
     var id = "levelAgent"
     Layout.addTab(id, "Nb Occurences LevelAgent");
     var updateButton = $("<button>").text("update");
-
-    var currentSpecificId = 0;
+    var colorChartSidebar = ColorChartSidebar(id);
 
     var config = {
         height: Layout.getContainerHeight(),
         width: Layout.getContainerWidth(),
         target: id + "Svg",
         yAxisTitle: "Agent",
+        overall_yAxisTitle: "System",
+        yAxisToUse: "specific",
         xAxisTitle: "Level",
         chartTitle: "Occurence of agent levels"
     };
 
 
     function updateChart(currentId) {
-        chart.update(dataReader.getLevelOccurences(systemIds[currentId]), config)
+        chart.update(dataReader.getLevelOccurences(systemIds[currentId]), config);
+        colorChartSidebar.updateStats(chart.getStats());
     }
 
     function updateConfig() {
-        config.minDomain = $("#" + id + "MinDomain").val();
-        config.maxDomain = $("#" + id + "MaxDomain").val();
-
+        colorChartSidebar.updateConfigs(config);
     }
 
-    var chart = Chart.colorChart(dataReader.getLevelOccurences(systemIds[0]), config);
+    var chart = Chart.ColorChart(dataReader.getLevelOccurences(systemIds[0]), config);
 
     var updater = {
         loadASystem: function (currentId) {
@@ -36,19 +36,17 @@ function nbOccurrences_LevelAgent(dataReader) {
         },
         loadAllSystems: function () {
             updateConfig();
-            chart.update(dataReader.getOverallLevelOccurences(), config)
+            chart.update(dataReader.getOverallLevelOccurences(), config);
+            colorChartSidebar.updateStats(chart.getStats());
         },
         update: null,
-        updateButton: updateButton
+        updateButton: updateButton,
+        config: config
     };
-
     updateButton.click(updater.update);
     var sideBarContents = [];
     sideBarContents.push(MultiSystemManager(systemIds, updater));
-    sideBarContents.push("<hr><br>Color minimum domain: ");
-    sideBarContents.push(Layout.createScaleInput(id + "MinDomain"));
-    sideBarContents.push("<hr><br>Color maximum domain: ");
-    sideBarContents.push(Layout.createScaleInput(id + "MaxDomain"));
+    sideBarContents.push(colorChartSidebar.getHTML());
     sideBarContents.push(updateButton);
     Layout.setSidebarContent(id, sideBarContents);
 

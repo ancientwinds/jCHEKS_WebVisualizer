@@ -2,6 +2,7 @@ var MultiSystemManager = function (systemIds, updater) {
     var currentSpecificId = 0;
     var switchButton;
     var navButtons;
+    var systemName = $("<strong>");
     var isOverall = false;
 
     function createNavigationButtons(onPreviousClick, onNextClick) {
@@ -21,6 +22,7 @@ var MultiSystemManager = function (systemIds, updater) {
     }
 
     var update = function () {
+        systemName.text("System: " + currentSpecificId);
         updater.loadASystem(currentSpecificId);
     };
 
@@ -39,6 +41,7 @@ var MultiSystemManager = function (systemIds, updater) {
     var onSwitchClick = function () {
         if (isOverall) {
             isOverall = false;
+            updater.config.yAxisToUse = "specific";
             updater.loadASystem(currentSpecificId);
             updater.update = update;
             navButtons.show();
@@ -47,15 +50,22 @@ var MultiSystemManager = function (systemIds, updater) {
         } else {
             isOverall = true;
             navButtons.hide();
+            updater.config.yAxisToUse = "overall";
             updater.loadAllSystems();
             updater.update = updater.loadAllSystems;
             switchButton.text("Switch to specific");
             updater.updateButton.click(updater.update);
+            systemName.text("All systems");
         }
     }
     updater.update = update;
     updater.updateButton.click(updater.update);
-    switchButton = $("<button>").text("Switch to overall").click(onSwitchClick);
+    switchButton = $("<button>").text("Switch to overall").click(onSwitchClick).addClass("large");
     navButtons = createNavigationButtons(onPrevious, onNext);
-    return $("<div>").attr("id", "switcher").append(switchButton).append("<br>").append(navButtons);
+    return $("<div>").attr("id", "switcher")
+        .append(switchButton)
+        .append("<br>")
+        .append(navButtons)
+        .append("<br>")
+        .append(systemName);
 }

@@ -12,6 +12,8 @@ class DatabaseManager {
         }
         $this->db = new PDO("sqlite:databases/" . $name);
         $this->db->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
+        ini_set('memory_limit', '256M');
+        set_time_limit(300);
     }
     function secureAlpha($tableName){
         return (preg_match("/^[A-Za-z0-9_-]+$/",trim($tableName)))? trim($tableName) : null;

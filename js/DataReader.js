@@ -269,12 +269,6 @@ var DataReader = function (databaseName) {
             formatter: NISTDataFormatter,
             type: "nist10"
         }));
-
-        shared.counter++;
-        allNistData = allNistData.concat(self.sendDataRequest({
-            formatter: NISTDataFormatter,
-            type: "nist12"
-        }));
         return allNistData;
     };
 

@@ -1,6 +1,10 @@
 <?php
     include("db/db.php"); 
     header('Content-type: application/json');
+    header('Access-Control-Allow-Origin: '.$_SERVER['HTTP_ORIGIN']);
+    header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
+    header('Access-Control-Max-Age: 1000');
+    header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
     function getData($configs) {
         $db = new DatabaseManager($configs["name"], $configs["limit"], $configs["limitedRow"]);
         if(!$db) {

@@ -14,18 +14,17 @@ var DataReader = function (databaseName) {
     self.sendDataRequest = function (config) {
         config.limit = (config.limit) ? config.limit : defaultLimit;
         resetDataArray();
-        var dataToSend = "";
+        var dataToSend= "";
+        dataToSend += "type=" + config.type;
+        dataToSend += "&name=" + databaseName;
         dataToSend += ((config.system) ? "&system=" + config.system : "");
         dataToSend += ((config.limit) ? "&limit=" + config.limit : "");
         dataToSend += ((config.limitedRow) ? "&limitedRow=" + config.limitedRow : "");
         dataToSend += ((config.overallColumn) ? "&overallColumn=" + config.overallColumn : "");
-        dataToSend += "&type=" + config.type;
-        dataToSend += "&name=" + databaseName;
-
         console.log(dataToSend.replace("&", "").split("&").join(",   ").split("=").join(" = "));
         $.ajax({
             url: "../php/getter.php",
-            type: "POST",
+            type: 'GET',
             dataType: 'json',
             async: false,
             data: dataToSend,

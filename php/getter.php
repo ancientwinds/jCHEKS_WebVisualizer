@@ -69,7 +69,7 @@
                 echo json_encode($db->getOverallOccurenceData("overall_nbOccurrences_level"));
                 break;
             case "overallButterfly":
-                echo json_encode($db->getOverallOccurenceData("overall_butterfly_effect"));
+                echo json_encode($db->getOverallOccurenceData("overall_butterfly"));
                 break;
         }
     }

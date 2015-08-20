@@ -36,7 +36,7 @@ function ButterflyEffect(dataReader) {
         },
         loadAllSystems: function () {
             chart.update(dataReader.getOverallButterflyEffect(), config);
-            ColorChartSidebar.updateStats(chart.getStats());
+            colorChartSidebar.updateStats(chart.getStats());
         },
         update: null,
         updateButton: updateButton,

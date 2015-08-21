@@ -4,6 +4,21 @@ function nbOccurrences_LevelVariation(dataReader) {
     var updateButton = $("<button>").text("update");
     Layout.addTab(id, "Nb occurrences Level Variation");
     var colorChartSidebar = ColorChartSidebar(id);
+    function getOverallData(){
+        return dataReader.sendDataRequest({
+            formatter: dataReader.overallDataFormatter,
+            type: "overallOccurenceVariation",
+        });
+    }
+    function getData(currentId){
+        return dataReader.sendDataRequest({
+            formatter: dataReader.occurrenceDataFormatter,
+            type: "occurenceVariation",
+            system: systemIds[currentId],
+            limitedRow: "variation"
+        });
+    }
+
     var config = {
         height: Layout.getContainerHeight(),
         width: Layout.getContainerWidth(),
@@ -14,19 +29,17 @@ function nbOccurrences_LevelVariation(dataReader) {
         xAxisTitle: "Variation",
         chartTitle: "Occurrences of level variation"
     };
-    function getData(){
-        return dataReader;
-    }
+
     function updateConfig() {
         colorChartSidebar.updateConfigs(config);
     }
 
     function updateChart(currentId) {
-        chart.update(dataReader.getVariationOccurences(systemIds[currentId]), config);
+        chart.update(getData(currentId), config);
         colorChartSidebar.updateStats(chart.getStats());
     }
 
-    var chart = Chart.ColorChart(dataReader.getVariationOccurences(systemIds[0]), config);
+    var chart = Chart.ColorChart(getData(0), config);
 
     var updater = {
         loadASystem: function (currentId) {
@@ -34,7 +47,7 @@ function nbOccurrences_LevelVariation(dataReader) {
             updateChart(currentId);
         },
         loadAllSystems: function () {
-            chart.update(dataReader.getOverallVariationOccurences(), config);
+            chart.update(getOverallData(), config);
             colorChartSidebar.updateStats(chart.getStats());
         },
         update: null,

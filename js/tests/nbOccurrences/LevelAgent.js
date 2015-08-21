@@ -6,6 +6,21 @@ function nbOccurrences_LevelAgent(dataReader) {
     var updateButton = $("<button>").text("update");
     var colorChartSidebar = ColorChartSidebar(id);
 
+    function getOverallData(){
+        return dataReader.sendDataRequest({
+            formatter: dataReader.overallDataFormatter,
+            type: "overallOccurenceLevel",
+        });
+    }
+    function getData(currentId){
+        return dataReader.sendDataRequest({
+            formatter: dataReader.occurrenceDataFormatter,
+            type: "occurenceLevel",
+            system: systemIds[currentId],
+            limitedRow: "variation"
+        });
+    }
+
     var config = {
         height: Layout.getContainerHeight(),
         width: Layout.getContainerWidth(),
@@ -17,11 +32,15 @@ function nbOccurrences_LevelAgent(dataReader) {
         chartTitle: "Occurence of agent levels"
     };
 
-    function getData(){
-        return dataReader;
+    function getOverallData(){
+        return dataReader.sendDataRequest({
+            formatter: dataReader.overallDataFormatter,
+            type: "overallOccurenceLevel",
+        });
     }
+
     function updateChart(currentId) {
-        chart.update(dataReader.getLevelOccurences(systemIds[currentId]), config);
+        chart.update(getData(currentId), config);
         colorChartSidebar.updateStats(chart.getStats());
     }
 
@@ -29,7 +48,7 @@ function nbOccurrences_LevelAgent(dataReader) {
         colorChartSidebar.updateConfigs(config);
     }
 
-    var chart = Chart.ColorChart(dataReader.getLevelOccurences(systemIds[0]), config);
+    var chart = Chart.ColorChart(getData(0), config);
 
     var updater = {
         loadASystem: function (currentId) {
@@ -38,7 +57,7 @@ function nbOccurrences_LevelAgent(dataReader) {
         },
         loadAllSystems: function () {
             updateConfig();
-            chart.update(dataReader.getOverallLevelOccurences(), config);
+            chart.update(getOverallData(), config);
             colorChartSidebar.updateStats(chart.getStats());
         },
         update: null,

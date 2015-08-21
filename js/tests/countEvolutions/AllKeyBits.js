@@ -12,7 +12,7 @@
             chartTitle: "Evolutions to see all bits of key"
         };
         function getData(){
-            dataReader.sendDataRequest({formatter: evolutionDataFormatter,type: "keyBits"});
+            return dataReader.sendDataRequest({formatter: dataReader.evolutionDataFormatter,type: "keyBits"});
         }
         var chart = Chart.BarChart(getData(), config);
 

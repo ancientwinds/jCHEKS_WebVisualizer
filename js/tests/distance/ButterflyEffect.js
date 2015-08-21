@@ -17,17 +17,30 @@ function ButterflyEffect(dataReader) {
         yAxisToUse: "specific",
         chartTitle: "Distance (Butterfly)"
     };
-    function getData(){
-        return dataReader.;
+    function getOverallData(){
+        return dataReader.sendDataRequest({
+            formatter: dataReader.overallDataFormatter,
+            type: "overallButterfly",
+        });
     }
-    var chart = Chart.ColorChart(dataReader.getButterflyEffect(systemIds[0]), config);
+
+    function getData(currentId){
+        return dataReader.sendDataRequest({
+            formatter: dataReader.butterflyDataFormatter,
+            type: "butterfly",
+            system: systemIds[currentId],
+            limitedRow: "evolution_count"
+        });
+    }
+
+    var chart = Chart.ColorChart(getData(0), config);
 
     function updateConfig() {
         colorChartSidebar.updateConfigs(config);
     }
 
     function updateChart(currentId) {
-        chart.update(dataReader.getButterflyEffect(systemIds[currentId]), config);
+        chart.update(getData(currentId), config);
         colorChartSidebar.updateStats(chart.getStats());
     }
 
@@ -37,7 +50,7 @@ function ButterflyEffect(dataReader) {
             updateChart(currentId);
         },
         loadAllSystems: function () {
-            chart.update(dataReader.getOverallButterflyEffect(), config);
+            chart.update(getOverallData(), config);
             colorChartSidebar.updateStats(chart.getStats());
         },
         update: null,

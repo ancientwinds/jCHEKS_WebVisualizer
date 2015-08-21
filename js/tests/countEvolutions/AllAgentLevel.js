@@ -4,7 +4,7 @@
         Layout.addTab(id, "AllLevelAgent");
         var barChartSidebar = BarChartSidebar(id);
         function getData(){
-            return dataReader.sendDataRequest({formatter: evolutionDataFormatter,type: "agentLevels"})
+            return dataReader.sendDataRequest({formatter: dataReader.evolutionDataFormatter,type: "agentLevels"})
         }
         var config = {
             height: Layout.getContainerHeight(),
@@ -22,7 +22,7 @@
         }
 
         function updateChart() {
-            chart.update(, config);
+            chart.update(getData(), config);
             barChartSidebar.updateStats(chart.getStats());
         }
 

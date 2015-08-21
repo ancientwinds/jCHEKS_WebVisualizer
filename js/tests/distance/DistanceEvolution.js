@@ -12,8 +12,28 @@ function DistanceEvolution(dataReader) {
         xAxisTitle: "Evolution ",
         chartTitle: "Distance between evolution "
     };
+    var systemIds = dataReader.getSystemNameForAType("namesForDistanceEvolution");
+    function getDataForASystem (currentId) {
+        return dataReader.sendDataRequest({
+            formatter: dataReader.distanceDataFormatter,
+            type: "distanceEvolution",
+            system: systemIds[currentId],
+            limit: 150
+        });
+    };
 
-    var chart = Chart.ColorChart(dataReader.getDistanceEvolution(), config);
+    function getData() {
+        var allDistanceData = [];
+        for (var i = 0; i < systemIds.length; i++) {
+            allDistanceData = allDistanceData.concat(getDataForASystem(i));
+        }
+        console.log("!!########!!!!!!!!!!!!",systemIds, allDistanceData);
+        console.log("!!########!!!!!!!!!!!!",systemIds, allDistanceData);
+        console.log("!!########!!!!!!!!!!!!",systemIds, allDistanceData);
+        return allDistanceData;
+    };
+
+    var chart = Chart.ColorChart(getData(), config);
 
 
     function updateConfig() {
@@ -21,7 +41,7 @@ function DistanceEvolution(dataReader) {
     }
 
     function updateChart() {
-        chart.update(dataReader.getDistanceEvolution(), config);
+        chart.update(getData(), config);
         colorChartSidebar.updateStats(chart.getStats());
     }
 

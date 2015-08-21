@@ -3,6 +3,7 @@ var DataReader = function (databaseName) {
     shared.dataArray = [];
     shared.formatedObject = {};
     shared.counter = 0;
+    shared.NISTCounter = 0;
     var defaultLimit = 500;
 
     function resetDataArray() {
@@ -21,7 +22,6 @@ var DataReader = function (databaseName) {
         dataToSend += ((config.limit) ? "&limit=" + config.limit : "");
         dataToSend += ((config.limitedRow) ? "&limitedRow=" + config.limitedRow : "");
         dataToSend += ((config.overallColumn) ? "&overallColumn=" + config.overallColumn : "");
-        console.log(dataToSend.replace("&", "").split("&").join(",   ").split("=").join(" = "));
         $.ajax({
             url: "../php/getter.php",
             type: 'GET',
@@ -34,7 +34,6 @@ var DataReader = function (databaseName) {
             }
         });
 
-        console.log(shared.dataArray.slice());
         return shared.dataArray.slice();
     }
 
@@ -61,26 +60,7 @@ var DataReader = function (databaseName) {
         }
     };
 
-    self.overallOccurrenceDataFormatter = function (receivedData) {
-        var name;
-        var yValue = -1;
-        for (var i = 0; i < receivedData.length; i++) {
-            if (receivedData[i].chaotic_system_id != name) {
-                yValue++;
-                name = receivedData[i].chaotic_system_id;
-            }
-            shared.formatedObject = {
-                systemId: receivedData[i].chaotic_system_id,
-                y: yValue,
-                x: parseInt(receivedData[i].groupIndex),
-                color: parseInt(receivedData[i].overallSum)
-
-            };
-            shared.dataArray.push(shared.formatedObject);
-        }
-    };
-
-    self.overallButterflyFormatter = function (receivedData) {
+    self.overallDataFormatter = function (receivedData) {
         var name;
         var yValue = -1;
         for (var i = 0; i < receivedData.length; i++) {
@@ -116,11 +96,12 @@ var DataReader = function (databaseName) {
             shared.formatedObject = {
                 systemId: receivedData[i].chaotic_system_id,
                 y: i,
-                x: shared.counter,
+                x: shared.NISTCounter,
                 color: parseFloat(receivedData[i].p_value)
             };
             shared.dataArray.push(shared.formatedObject);
         }
+        shared.NISTCounter++;
     }
 
     self.distanceDataFormatter = function (data2) {
@@ -133,85 +114,17 @@ var DataReader = function (databaseName) {
             };
             shared.dataArray.push(shared.formatedObject);
         }
+        shared.counter++;
     }
 
-    self.nameListFormatter = function (receivedData) {
+    var nameListFormatter = function (receivedData) {
         for (var i = 0; i < receivedData.length; i++) {
             shared.dataArray.push(receivedData[i].chaotic_system_id);
         }
     }
 
-    self.getOverallLevelOccurences = function () {
-        return self.sendDataRequest({
-            formatter: overallOccurrenceDataFormatter,
-            type: "overallOccurenceLevel",
-        });
-    };
 
-    self.getOverallVariationOccurences = function () {
-        return self.sendDataRequest({
-            formatter: overallOccurrenceDataFormatter,
-            type: "overallOccurenceVariation",
-        });
-    };
-
-    self.getOverallButterflyEffect = function () {
-        return self.sendDataRequest({
-            formatter: overallButterflyFormatter,
-            type: "overallButterfly",
-        });
-    };
-
-    self.getLevelOccurences = function (systemId) {
-        return self.sendDataRequest({
-            formatter: occurrenceDataFormatter,
-            type: "occurenceLevel",
-            system: systemId,
-            limitedRow: "variation"
-        });
-    };
-
-    self.getVariationOccurences = function (systemId) {
-        return self.sendDataRequest({
-            formatter: occurrenceDataFormatter,
-            type: "occurenceVariation",
-            system: systemId,
-            limitedRow: "variation"
-        });
-    };
-
-    self.getButterflyEffect = function (systemId) {
-        return self.sendDataRequest({
-            formatter: occurrenceDataFormatter,
-            type: "butterfly",
-            system: systemId,
-            limitedRow: "evolution_count"
-        });
-    };
-
-    self.getDistanceEvolutionForASystem = function (systemId) {
-        return self.sendDataRequest({
-            formatter: distanceDataFormatter,
-            type: "distanceEvolution",
-            system: systemId,
-            limit: 150
-        });
-    };
-
-    self.getDistanceEvolution = function () {
-        var allDistanceData = [];
-        var systemIds = self.getSystemNamesForDistanceEvolution();
-        for (shared.counter = 0; shared.counter < systemIds.length; shared.counter++) {
-            allDistanceData = allDistanceData.concat(self.getDistanceEvolutionForASystem(systemIds[shared.counter]));
-        }
-        return allDistanceData;
-    };
-
-    self.getNist = function () {
-
-    };
-
-    self.getSystemNameForAType(type){
+    self.getSystemNameForAType = function(type){
         return self.sendDataRequest({
             formatter: nameListFormatter,
             type: type

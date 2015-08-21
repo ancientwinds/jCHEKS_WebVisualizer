@@ -18,7 +18,7 @@ function DistanceEvolution(dataReader) {
             formatter: dataReader.distanceDataFormatter,
             type: "distanceEvolution",
             system: systemIds[currentId],
-            limit: 150
+            limit: config.limit.x
         });
     };
 
@@ -27,9 +27,6 @@ function DistanceEvolution(dataReader) {
         for (var i = 0; i < systemIds.length; i++) {
             allDistanceData = allDistanceData.concat(getDataForASystem(i));
         }
-        console.log("!!########!!!!!!!!!!!!",systemIds, allDistanceData);
-        console.log("!!########!!!!!!!!!!!!",systemIds, allDistanceData);
-        console.log("!!########!!!!!!!!!!!!",systemIds, allDistanceData);
         return allDistanceData;
     };
 

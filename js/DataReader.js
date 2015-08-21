@@ -126,7 +126,8 @@ var DataReader = function (databaseName) {
     self.getSystemNameForAType = function(type){
         return self.sendDataRequest({
             formatter: nameListFormatter,
-            type: type
+            type: type,
+            limit: 100000
         });
     }
     return self;

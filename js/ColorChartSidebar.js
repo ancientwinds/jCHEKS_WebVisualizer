@@ -5,7 +5,9 @@ var ColorChartSidebar = function (mainId) {
             .append($("<label>").text(caption))
             .append($("<input>").attr("type", "number").attr("min", "0").attr("id", mainId + id));
     }
-
+    function getInputValue(element){
+        return element.children().eq(1).val();
+    }
     var sidebar = {};
 
     sidebar.scale = {};
@@ -15,10 +17,6 @@ var ColorChartSidebar = function (mainId) {
     sidebar.scale.maxRangeInput = createScaleInput("ColorMaxRange", "Max");
 
     sidebar.elementSize = createScaleInput("Size", "Size");
-
-    sidebar.white = {};
-    sidebar.white.min = null; // Not implemented
-    sidebar.white.max = null; // Not implemented
 
     sidebar.black = {};
     sidebar.black.maxInput = createScaleInput("BlackMinRange", "Max");
@@ -32,29 +30,37 @@ var ColorChartSidebar = function (mainId) {
     sidebar.white.maxInput = createScaleInput("WhiteMinRange", "Max");
     sidebar.white.minInput = createScaleInput("WhiteMinRange", "Min");
 
+    sidebar.limit = {}
+    sidebar.limit.xInput = createScaleInput("LimitX", "X");
+    sidebar.limit.yInput = createScaleInput("LimitY", "Y");
+
     sidebar.stats = $("<div>");
 
     var self = {};
     self.updateConfigs = function (configToUpdate) {
         configToUpdate.scale = {};
-        configToUpdate.scale.minDomain = sidebar.scale.minDomainInput.children().eq(1).val();
-        configToUpdate.scale.maxDomain = sidebar.scale.maxDomainInput.children().eq(1).val();
-        configToUpdate.scale.minRange = sidebar.scale.minRangeInput.children().eq(1).val();
-        configToUpdate.scale.maxRange = sidebar.scale.maxRangeInput.children().eq(1).val();
+        configToUpdate.scale.minDomain = getInputValue(sidebar.scale.minDomainInput);
+        configToUpdate.scale.maxDomain = getInputValue(sidebar.scale.maxDomainInput);
+        configToUpdate.scale.minRange = getInputValue(sidebar.scale.minRangeInput);
+        configToUpdate.scale.maxRange = getInputValue(sidebar.scale.maxRangeInput);
 
         configToUpdate.black = {};
-        configToUpdate.black.max = sidebar.black.maxInput.children().eq(1).val();
-        configToUpdate.black.min = sidebar.black.minInput.children().eq(1).val();
+        configToUpdate.black.max = getInputValue(sidebar.black.maxInput);
+        configToUpdate.black.min = getInputValue(sidebar.black.minInput);
 
         configToUpdate.grey = {};
-        configToUpdate.grey.max = sidebar.grey.maxInput.children().eq(1).val();
-        configToUpdate.grey.min = sidebar.grey.minInput.children().eq(1).val();
+        configToUpdate.grey.max = getInputValue(sidebar.grey.maxInput);
+        configToUpdate.grey.min = getInputValue(sidebar.grey.minInput);
 
         configToUpdate.white = {};
-        configToUpdate.white.max = sidebar.white.maxInput.children().eq(1).val();
-        configToUpdate.white.min = sidebar.white.minInput.children().eq(1).val();
+        configToUpdate.white.max = getInputValue(sidebar.white.maxInput);
+        configToUpdate.white.min = getInputValue(sidebar.white.minInput)
 
-        configToUpdate.elementSize = sidebar.elementSize.children().eq(1).val();
+        configToUpdate.limit = {};
+        configToUpdate.limit.x = getInputValue(sidebar.limit.xInput);
+        configToUpdate.limit.y = getInputValue(sidebar.limit.yInput);
+
+        configToUpdate.elementSize = getInputValue(sidebar.elementSize);
 
     };
 

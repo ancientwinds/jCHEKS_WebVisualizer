@@ -1,0 +1,6 @@
+Task: Impact
+
+- Use asynchrone ajax request in dataReader: performance,
+- Rename SQL column name to when reading them to use generic names: performance (less js code),
+- Make only one request to the database when loading distance evolution graph: performance,
+- Verify if there is the 0 value in input to prevent convert 0 to false and reseting value to default: bug fix,

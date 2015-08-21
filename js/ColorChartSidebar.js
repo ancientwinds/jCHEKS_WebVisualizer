@@ -103,6 +103,12 @@ var ColorChartSidebar = function (mainId) {
             .append("<br>")
             .append(sidebar.white.maxInput)
             .append("<hr>")
+            .append($("<strong>").text("Limits"))
+            .append("<br>")
+            .append(sidebar.limit.xInput)
+            .append("<br>")
+            .append(sidebar.limit.yInput)
+            .append("<hr>")
             .append($("<strong>").text("Stats"))
             .append(sidebar.stats)
             .append("<br>");

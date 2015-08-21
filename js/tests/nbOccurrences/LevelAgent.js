@@ -6,20 +6,6 @@ function nbOccurrences_LevelAgent(dataReader) {
     var updateButton = $("<button>").text("update");
     var colorChartSidebar = ColorChartSidebar(id);
 
-    function getOverallData(){
-        return dataReader.sendDataRequest({
-            formatter: dataReader.overallDataFormatter,
-            type: "overallOccurenceLevel",
-        });
-    }
-    function getData(currentId){
-        return dataReader.sendDataRequest({
-            formatter: dataReader.occurrenceDataFormatter,
-            type: "occurenceLevel",
-            system: systemIds[currentId],
-            limitedRow: "variation"
-        });
-    }
 
     var config = {
         height: Layout.getContainerHeight(),
@@ -29,8 +15,27 @@ function nbOccurrences_LevelAgent(dataReader) {
         overall_yAxisTitle: "System",
         yAxisToUse: "specific",
         xAxisTitle: "Level",
-        chartTitle: "Occurence of agent levels"
+        chartTitle: "Occurence of agent levels",
+        limit: {}
     };
+
+    function getOverallData(){
+        return dataReader.sendDataRequest({
+            formatter: dataReader.overallDataFormatter,
+            type: "overallOccurenceLevel",
+        });
+    }
+
+    function getData(currentId){
+        return dataReader.sendDataRequest({
+            formatter: dataReader.occurrenceDataFormatter,
+            type: "occurenceLevel",
+            system: systemIds[currentId],
+            limitedRow: "variation",
+            limit: config.limit.x
+        });
+    }
+
 
     function getOverallData(){
         return dataReader.sendDataRequest({

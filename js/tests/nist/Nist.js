@@ -7,37 +7,44 @@ function Nist(dataReader) {
         var allNistData = [];
         allNistData = allNistData.concat(dataReader.sendDataRequest({
             formatter: dataReader.NISTDataFormatter,
-            type: "nist1"
+            type: "nist1",
+            limit: 100000
         }));
 
         allNistData = allNistData.concat(dataReader.sendDataRequest({
             formatter: dataReader.NISTDataFormatter,
-            type: "nist2"
+            type: "nist2",
+            limit: 100000
         }));
 
         allNistData = allNistData.concat(dataReader.sendDataRequest({
             formatter: dataReader.NISTDataFormatter,
-            type: "nist3"
+            type: "nist3",
+            limit: 100000
         }));
 
         allNistData = allNistData.concat(dataReader.sendDataRequest({
             formatter: dataReader.NISTDataFormatter,
-            type: "nist4"
+            type: "nist4",
+            limit: 100000
         }));
 
         allNistData = allNistData.concat(dataReader.sendDataRequest({
             formatter: dataReader.NISTDataFormatter,
-            type: "nist5"
+            type: "nist5",
+            limit: 100000
         }));
 
         allNistData = allNistData.concat(dataReader.sendDataRequest({
             formatter: dataReader.NISTDataFormatter,
-            type: "nist9"
+            type: "nist9",
+            limit: 100000
         }));
 
         allNistData = allNistData.concat(dataReader.sendDataRequest({
             formatter: dataReader.NISTDataFormatter,
-            type: "nist10"
+            type: "nist10",
+            limit: 100000
         }));
         return allNistData;
     }

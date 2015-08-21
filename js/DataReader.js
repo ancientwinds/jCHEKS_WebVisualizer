@@ -4,7 +4,7 @@ var DataReader = function (databaseName) {
     shared.formatedObject = {};
     shared.counter = 0;
     shared.NISTCounter = 0;
-    var defaultLimit = 500;
+    var defaultLimit = 32;
 
     function resetDataArray() {
         shared.dataArray = [];
@@ -122,7 +122,6 @@ var DataReader = function (databaseName) {
             shared.dataArray.push(receivedData[i].chaotic_system_id);
         }
     }
-
 
     self.getSystemNameForAType = function(type){
         return self.sendDataRequest({

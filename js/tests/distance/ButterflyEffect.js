@@ -15,7 +15,8 @@ function ButterflyEffect(dataReader) {
         overall_yAxisTitle: "System",
         xAxisTitle: "Evolution",
         yAxisToUse: "specific",
-        chartTitle: "Distance (Butterfly)"
+        chartTitle: "Distance (Butterfly)",
+        limit: {}
     };
     function getOverallData(){
         return dataReader.sendDataRequest({
@@ -29,7 +30,8 @@ function ButterflyEffect(dataReader) {
             formatter: dataReader.butterflyDataFormatter,
             type: "butterfly",
             system: systemIds[currentId],
-            limitedRow: "evolution_count"
+            limitedRow: "evolution_count",
+            limit: config.limit.x
         });
     }
 

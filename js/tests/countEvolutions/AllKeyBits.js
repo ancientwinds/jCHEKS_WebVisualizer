@@ -9,10 +9,10 @@
             target: id + "Svg",
             yAxisTitle: "System",
             xAxisTitle: "Evolutions",
-            chartTitle: "Evolutions to see all bits of key"
+            chartTitle: "Evolutions to see all bits of key",
         };
         function getData(){
-            return dataReader.sendDataRequest({formatter: dataReader.evolutionDataFormatter,type: "keyBits"});
+            return dataReader.sendDataRequest({formatter: dataReader.evolutionDataFormatter,type: "keyBits", limit: 100000});
         }
         var chart = Chart.BarChart(getData(), config);
 

@@ -4,7 +4,20 @@ function nbOccurrences_LevelVariation(dataReader) {
     var updateButton = $("<button>").text("update");
     Layout.addTab(id, "Nb occurrences Level Variation");
     var colorChartSidebar = ColorChartSidebar(id);
-    function getOverallData(){
+
+    var config = {
+        height: Layout.getContainerHeight(),
+        width: Layout.getContainerWidth(),
+        target: id + "Svg",
+        yAxisTitle: "Agent",
+        overall_yAxisTitle: "System",
+        yAxisToUse: "specific",
+        xAxisTitle: "Variation",
+        chartTitle: "Occurrences of level variation",
+        limit: {}
+    };
+
+     function getOverallData(){
         return dataReader.sendDataRequest({
             formatter: dataReader.overallDataFormatter,
             type: "overallOccurenceVariation",
@@ -15,20 +28,11 @@ function nbOccurrences_LevelVariation(dataReader) {
             formatter: dataReader.occurrenceDataFormatter,
             type: "occurenceVariation",
             system: systemIds[currentId],
-            limitedRow: "variation"
+            limitedRow: "variation",
+            limit: config.limit.x
+
         });
     }
-
-    var config = {
-        height: Layout.getContainerHeight(),
-        width: Layout.getContainerWidth(),
-        target: id + "Svg",
-        yAxisTitle: "Agent",
-        overall_yAxisTitle: "System",
-        yAxisToUse: "specific",
-        xAxisTitle: "Variation",
-        chartTitle: "Occurrences of level variation"
-    };
 
     function updateConfig() {
         colorChartSidebar.updateConfigs(config);

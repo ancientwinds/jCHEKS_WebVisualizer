@@ -4,7 +4,7 @@
         Layout.addTab(id, "AllLevelAgent");
         var barChartSidebar = BarChartSidebar(id);
         function getData(){
-            return dataReader.sendDataRequest({formatter: dataReader.evolutionDataFormatter,type: "agentLevels"})
+            return dataReader.sendDataRequest({formatter: dataReader.evolutionDataFormatter,type: "agentLevels", limit:100000})
         }
         var config = {
             height: Layout.getContainerHeight(),
@@ -12,7 +12,7 @@
             target: id + "Svg",
             yAxisTitle: "System",
             xAxisTitle: "Evolutions",
-            chartTitle: "Evolutions to see all agent levels"
+            chartTitle: "Evolutions to see all agent levels",
         }
 
         var chart = Chart.BarChart(getData(), config);

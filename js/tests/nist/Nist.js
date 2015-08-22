@@ -46,6 +46,7 @@ function Nist(dataReader) {
             type: "nist10",
             limit: 100000
         }));
+        dataReader.resetNistCounter();
         return allNistData;
     }
     var config = {
@@ -64,7 +65,7 @@ function Nist(dataReader) {
     }
 
     function updateChart() {
-        chart.update(dataReader.getNist(), config);
+        chart.update(getData(), config);
     }
 
     var update = function () {

@@ -18,7 +18,7 @@
         var chart = Chart.BarChart(getData(), config);
 
         function updateConfig() {
-            barChartSidebar.updateConfigs(getData(), config);
+            barChartSidebar.updateConfigs(config);
         }
 
         function updateChart() {

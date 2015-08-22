@@ -10,7 +10,8 @@ function DistanceEvolution(dataReader) {
         target: id + "Svg",
         yAxisTitle: "System ",
         xAxisTitle: "Evolution ",
-        chartTitle: "Distance between evolution "
+        chartTitle: "Distance between evolution ",
+        limit: {}
     };
     var systemIds = dataReader.getSystemNameForAType("namesForDistanceEvolution");
     function getDataForASystem (currentId) {

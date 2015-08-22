@@ -116,6 +116,9 @@ var DataReader = function (databaseName) {
         }
         shared.counter++;
     }
+    self.resetNistCounter = function(){
+        shared.NISTCounter = 0;
+    }
 
     var nameListFormatter = function (receivedData) {
         for (var i = 0; i < receivedData.length; i++) {

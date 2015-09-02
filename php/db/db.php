@@ -2,9 +2,7 @@
 class DatabaseManager {
     var $db = null;
 
-    function __construct($name, $limit = "" , $limitedRow, $xLimit, $yLimit, $limitedColumn) {
-        $this->baselimit = $limit;
-
+    function __construct($name, $limitedRow = null, $xLimit = null, $yLimit = null, $limitedColumn = null) {
         $this->xLimit = $xLimit;
         $this->yLimit = $yLimit;
         $this->limitedColumn = $limitedColumn;
@@ -20,12 +18,11 @@ class DatabaseManager {
     }
 
     function secureNumeric($limit){
-        return (ctype_digit(trim($limit)))? trim($limit) : null;
+        return (ctype_digit(trim($limit)))? trim($limit) : 0;
     }
 
     function getDataForASystemFromTableInDatabase($table, $systemId){
-        if(!$this->secureNumeric($this->baselimit)){echo "Invalid limit.";}
-        $statement = $this->db->prepare("SELECT * FROM ".$table." WHERE chaotic_system_id='".$this->secureAlpha($systemId)."' ".$this->limit);
+        $statement = $this->db->prepare("SELECT * FROM ".$table." WHERE chaotic_system_id='".$this->secureAlpha($systemId)."' ".secureNumeric($this->xlimit));
         $statement->setFetchMode(PDO::FETCH_ASSOC);
         if(!$statement->execute())return null;
         return $statement->fetchAll();
@@ -33,7 +30,7 @@ class DatabaseManager {
     
     function getDataOfAllSystemsFromTableInDatabase($table){
         if(!$this->secureNumeric($this->baselimit)){echo "Invalid limit.";}
-        $statement = $this->db->prepare("SELECT * FROM ".$this->secureAlpha($table)." ".$this->xLimit);
+        $statement = $this->db->prepare("SELECT * FROM ".$this->secureAlpha($table)." ".secureNumeric($this->xlimit));
         $statement->setFetchMode(PDO::FETCH_ASSOC);
         if(!$statement->execute()) return null;
         return $statement->fetchAll();
@@ -50,7 +47,7 @@ class DatabaseManager {
     
     function getSystemsNamesInTable($table){
         if(!$this->secureNumeric($this->baselimit)){echo "Invalid limit.";}
-        $statement = $this->db->prepare("SELECT DISTINCT chaotic_system_id FROM ".$this->secureAlpha($table)." ".$this->xLimit);
+        $statement = $this->db->prepare("SELECT DISTINCT chaotic_system_id FROM ".$this->secureAlpha($table)." ".secureNumeric($this->xlimit));
         $statement->setFetchMode(PDO::FETCH_ASSOC);
         if(!$statement->execute()) return null;
         return $statement->fetchAll();

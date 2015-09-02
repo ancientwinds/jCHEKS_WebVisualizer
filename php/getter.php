@@ -2,7 +2,7 @@
     include("db/db.php"); 
     header('Content-type: application/json');
     function getData($configs) {
-        $db = new DatabaseManager($configs["name"], $configs["limit"], $configs["limitedRow"]);
+        $db = new DatabaseManager($configs["name"], $configs["limit"], $configs["limitedRow"], $configs["xLimit"], $configs["yLimit"]);
         if(!$db) {
            echo $db->lastErrorMsg();
         }
@@ -82,6 +82,6 @@
         }
         return $result;
     }
-    $configs = array("type" => "", "system" => "", "name" => "", "limit" => "", "limitedRow" => "", "overallColumn" => "" );
+    $configs = array("type" => "", "system" => "", "name" => "", "xLimit" => "", "yLimit" => "",  "limitedRow" => "", "overallColumn" => "" );
     $configs = validateConfigs($configs);
     getData($configs);

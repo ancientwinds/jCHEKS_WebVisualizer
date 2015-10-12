@@ -22,7 +22,7 @@ class DatabaseManager {
     }
 
     function getDataForASystemFromTableInDatabase($table, $systemId){
-        $statement = $this->db->prepare("SELECT * FROM ".$table." WHERE chaotic_system_id='".$this->secureAlpha($systemId)."' ".secureNumeric($this->xlimit));
+        $statement = $this->db->prepare("SELECT * FROM ".$table." WHERE chaotic_system_id='".$this->secureAlpha($systemId)."' ".$this->secureNumeric($this->xlimit));
         $statement->setFetchMode(PDO::FETCH_ASSOC);
         if(!$statement->execute())return null;
         return $statement->fetchAll();
@@ -30,7 +30,7 @@ class DatabaseManager {
     
     function getDataOfAllSystemsFromTableInDatabase($table){
         if(!$this->secureNumeric($this->baselimit)){echo "Invalid limit.";}
-        $statement = $this->db->prepare("SELECT * FROM ".$this->secureAlpha($table)." ".secureNumeric($this->xlimit));
+        $statement = $this->db->prepare("SELECT * FROM ".$this->secureAlpha($table)." ".$this->secureNumeric($this->xlimit));
         $statement->setFetchMode(PDO::FETCH_ASSOC);
         if(!$statement->execute()) return null;
         return $statement->fetchAll();
@@ -47,7 +47,7 @@ class DatabaseManager {
     
     function getSystemsNamesInTable($table){
         if(!$this->secureNumeric($this->baselimit)){echo "Invalid limit.";}
-        $statement = $this->db->prepare("SELECT DISTINCT chaotic_system_id FROM ".$this->secureAlpha($table)." ".secureNumeric($this->xlimit));
+        $statement = $this->db->prepare("SELECT DISTINCT chaotic_system_id FROM ".$this->secureAlpha($table)." ".$this->secureNumeric($this->xlimit));
         $statement->setFetchMode(PDO::FETCH_ASSOC);
         if(!$statement->execute()) return null;
         return $statement->fetchAll();

@@ -11,14 +11,18 @@ function DistanceEvolution(dataReader) {
         yAxisTitle: "System ",
         xAxisTitle: "Evolution ",
         chartTitle: "Distance between evolution ",
-        limit: {}
+        limit: {
+            x: 100
+        }
     };
-    var systemIds = dataReader.getSystemNameForAType("namesForDistanceEvolution");
-    function getDataForASystem (currentId) {
+    var systemIds = dataReader.getSystemNameForAType("namesForDistanceEvolution", 100);
+
+    function getDataForASystem(currentId) {
         return dataReader.sendDataRequest({
             formatter: dataReader.distanceDataFormatter,
             type: "distanceEvolution",
             system: systemIds[currentId],
+            limitedRow: "distance",
             limit: config.limit.x
         });
     };
@@ -50,6 +54,6 @@ function DistanceEvolution(dataReader) {
 
     var sideBarContents = [];
     sideBarContents.push(colorChartSidebar.getHTML());
-    sideBarContents.push($("<button>").text("update").click(update));
+    //sideBarContents.push($("<button>").text("update").click(update));
     Layout.setSidebarContent(id, sideBarContents);
 }

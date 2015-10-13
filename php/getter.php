@@ -2,7 +2,7 @@
     include("db/db.php"); 
     header('Content-type: application/json');
     function getData($configs) {
-        $db = new DatabaseManager($configs["name"], $configs["limit"], $configs["limitedRow"], $configs["xLimit"], $configs["yLimit"]);
+        $db = new DatabaseManager($configs["name"], $configs["limitedRow"], $configs["xLimit"], $configs["yLimit"]);
         if(!$db) {
            echo $db->lastErrorMsg();
         }
@@ -35,14 +35,35 @@
             case "nist5":
                 echo json_encode($db->getDataOfAllSystemsFromTableInDatabase("Binary_Matrix_Rank_NIST_5"));
                 break;
+            case "nist6":
+                echo json_encode($db->getDataOfAllSystemsFromTableInDatabase("Discrete_Fourier_Transform_NIST_6"));
+                break;
+            case "nist7":
+                echo json_encode($db->getDataOfAllSystemsFromTableInDatabase("non_overlapping_template_matching_NIST_7"));
+                break;
+            case "nist8":
+                echo json_encode($db->getDataOfAllSystemsFromTableInDatabase("overlapping_template_matching_NIST_8"));
+                break;
             case "nist9":
                 echo json_encode($db->getDataOfAllSystemsFromTableInDatabase("Maurers_Universal_Statistical_NIST_9"));
                 break;
             case "nist10":
                 echo json_encode($db->getDataOfAllSystemsFromTableInDatabase("Linear_Complexity_NIST_10"));
                 break;
+            case "nist11":
+                echo json_encode($db->getDataOfAllSystemsFromTableInDatabase("serial_NIST_11"));
+                break;
             case "nist12":
                 echo json_encode($db->getDataOfAllSystemsFromTableInDatabase("Approximate_Entropy_NIST_12"));
+                break;
+            case "nist13":
+                echo json_encode($db->getDataOfAllSystemsFromTableInDatabase("cumulative_sums_NIST_13"));
+                break;
+            case "nist14":
+                echo json_encode($db->getDataOfAllSystemsFromTableInDatabase("random_excursions_NIST_14"));
+                break;
+            case "nist15":
+                echo json_encode($db->getDataOfAllSystemsFromTableInDatabase("random_excursions_variant_NIST_15"));
                 break;
             case "butterflyName":
                 echo json_encode($db->getSystemsNamesInTable("butterfly_effect"));
@@ -82,6 +103,7 @@
         }
         return $result;
     }
+
     $configs = array("type" => "", "system" => "", "name" => "", "xLimit" => "", "yLimit" => "",  "limitedRow" => "", "overallColumn" => "" );
     $configs = validateConfigs($configs);
     getData($configs);

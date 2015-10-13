@@ -3,7 +3,8 @@ function Nist(dataReader) {
     var id = "nist";
     Layout.addTab(id, "Nist");
     var nistChartSidebar = NistChartSidebar(id);
-    function getData(){
+
+    function getData() {
         var allNistData = [];
         allNistData = allNistData.concat(dataReader.sendDataRequest({
             formatter: dataReader.NISTDataFormatter,
@@ -34,7 +35,21 @@ function Nist(dataReader) {
             type: "nist5",
             limit: 100000
         }));
-
+        allNistData = allNistData.concat(dataReader.sendDataRequest({
+            formatter: dataReader.NISTDataFormatter,
+            type: "nist6",
+            limit: 100000
+        }));
+        allNistData = allNistData.concat(dataReader.sendDataRequest({
+            formatter: dataReader.NISTDataFormatter,
+            type: "nist7",
+            limit: 100000
+        }));
+        allNistData = allNistData.concat(dataReader.sendDataRequest({
+            formatter: dataReader.NISTDataFormatter,
+            type: "nist8",
+            limit: 100000
+        }));
         allNistData = allNistData.concat(dataReader.sendDataRequest({
             formatter: dataReader.NISTDataFormatter,
             type: "nist9",
@@ -44,6 +59,31 @@ function Nist(dataReader) {
         allNistData = allNistData.concat(dataReader.sendDataRequest({
             formatter: dataReader.NISTDataFormatter,
             type: "nist10",
+            limit: 100000
+        }));
+        allNistData = allNistData.concat(dataReader.sendDataRequest({
+            formatter: dataReader.NISTDataFormatter,
+            type: "nist11",
+            limit: 100000
+        }));
+        allNistData = allNistData.concat(dataReader.sendDataRequest({
+            formatter: dataReader.NISTDataFormatter,
+            type: "nist12",
+            limit: 100000
+        }));
+        allNistData = allNistData.concat(dataReader.sendDataRequest({
+            formatter: dataReader.NISTDataFormatter,
+            type: "nist13",
+            limit: 100000
+        }));
+        allNistData = allNistData.concat(dataReader.sendDataRequest({
+            formatter: dataReader.NISTDataFormatter,
+            type: "nist14",
+            limit: 100000
+        }));
+        allNistData = allNistData.concat(dataReader.sendDataRequest({
+            formatter: dataReader.NISTDataFormatter,
+            type: "nist15",
             limit: 100000
         }));
         dataReader.resetNistCounter();

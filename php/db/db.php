@@ -13,45 +13,67 @@ class DatabaseManager {
         set_time_limit(300);
     }
 
-    function secureAlpha($tableName){
-        return (preg_match("/^[A-Za-z0-9_-]+$/",trim($tableName)))? trim($tableName) : null;
-    }
-
-    function secureNumeric($limit){
-        return (ctype_digit(trim($limit)))? trim($limit) : 0;
-    }
-
     function getDataForASystemFromTableInDatabase($table, $systemId){
-        $statement = $this->db->prepare("SELECT * FROM ".$table." WHERE chaotic_system_id='".$this->secureAlpha($systemId)."' ".$this->secureNumeric($this->xlimit));
+        $systemIdClean = $this->escape($systemId);
+        $tableClean = $this->escape($table);
+        $xlimitClean = $this->escape($this->xLimit);
+        $sql = "SELECT * FROM ". $tableClean ." WHERE chaotic_system_id='" . $systemIdClean . "'";
+        if($xlimitClean){
+            $sql = $sql . " LIMIT " . $xlimitClean;
+        }
+        $statement = $this->db->prepare($sql);
         $statement->setFetchMode(PDO::FETCH_ASSOC);
         if(!$statement->execute())return null;
         return $statement->fetchAll();
     }
     
     function getDataOfAllSystemsFromTableInDatabase($table){
-        if(!$this->secureNumeric($this->baselimit)){echo "Invalid limit.";}
-        $statement = $this->db->prepare("SELECT * FROM ".$this->secureAlpha($table)." ".$this->secureNumeric($this->xlimit));
+        $tableClean = $this->escape($table);
+        $xlimitClean = $this->escape($this->xLimit);
+        $sql = "SELECT * FROM '". $tableClean . "'";
+        if($xlimitClean){
+            $sql = $sql . " LIMIT " . $xlimitClean;
+        }
+        $statement = $this->db->prepare($sql);
         $statement->setFetchMode(PDO::FETCH_ASSOC);
         if(!$statement->execute()) return null;
         return $statement->fetchAll();
     }
     
     function getOverallOccurenceData($table){
-        if(!$this->secureNumeric($this->baselimit)){echo "Invalid limit.";}
         $this->xLimit = str_replace("LIMIT","",$this->xLimit);
-        $statement = $this->db->prepare("SELECT * FROM '".$this->secureAlpha($table)."' GROUP BY chaotic_system_id, groupIndex");
+        $xlimitClean = $this->escape($this->xLimit);
+        $tableClean = $this->escape($table);
+        $limitedColumnClean = $this->esccape($this.limitedColumn);
+        $sql = "SELECT * FROM '" . $tableClean . "'";
+        if($xlimitClean &&  $limitedColumnClean){
+            $sql = $sql . " WHERE " . $limitedColumnClean . " < " . $xlimitClean;
+        }
+        $sql = $sql . " GROUP BY chaotic_system_id, groupIndex";
+        $statement = $this->db->prepare($sql);
         $statement->setFetchMode(PDO::FETCH_ASSOC);
         if(!$statement->execute()) return null;
         return $statement->fetchAll();
     }
     
     function getSystemsNamesInTable($table){
-        if(!$this->secureNumeric($this->baselimit)){echo "Invalid limit.";}
-        $statement = $this->db->prepare("SELECT DISTINCT chaotic_system_id FROM ".$this->secureAlpha($table)." ".$this->secureNumeric($this->xlimit));
+        $tableClean = $this->escape($table);
+        $xlimitClean = $this->escape($this->xLimit);
+        $sql = "SELECT DISTINCT chaotic_system_id FROM " . $tableClean;
+        if($xlimitClean){
+            $sql = $sql . " LIMIT " . $xlimitClean;
+        }
+        $statement = $this->db->prepare($sql);
+
         $statement->setFetchMode(PDO::FETCH_ASSOC);
         if(!$statement->execute()) return null;
         return $statement->fetchAll();
     }
+    function escape($value){
+        $search = array("\\",  "\x00", "\n",  "\r",  "'",  '"', "\x1a");
+        $replace = array("\\\\","\\0","\\n", "\\r", "\'", '\"', "\\Z");
 
+        return str_replace($search, $replace, $value);
+    }
 
 }

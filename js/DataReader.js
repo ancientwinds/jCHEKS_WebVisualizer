@@ -15,11 +15,11 @@ var DataReader = function (databaseName) {
     self.sendDataRequest = function (config) {
         config.limit = (config.limit) ? config.limit : defaultLimit;
         resetDataArray();
-        var dataToSend= "";
+        var dataToSend = "";
         dataToSend += "type=" + config.type;
         dataToSend += "&name=" + databaseName;
         dataToSend += ((config.system) ? "&system=" + config.system : "");
-        dataToSend += ((config.limit) ? "&limit=" + config.limit : "");
+        dataToSend += ((config.limit) ? "&xLimit=" + config.limit : "");
         dataToSend += ((config.limitedRow) ? "&limitedRow=" + config.limitedRow : "");
         dataToSend += ((config.overallColumn) ? "&overallColumn=" + config.overallColumn : "");
         $.ajax({
@@ -116,7 +116,7 @@ var DataReader = function (databaseName) {
         }
         shared.counter++;
     }
-    self.resetNistCounter = function(){
+    self.resetNistCounter = function () {
         shared.NISTCounter = 0;
     }
 
@@ -126,11 +126,12 @@ var DataReader = function (databaseName) {
         }
     }
 
-    self.getSystemNameForAType = function(type){
+    self.getSystemNameForAType = function (type, limit) {
+        limit = limit || 1000;
         return self.sendDataRequest({
             formatter: nameListFormatter,
             type: type,
-            limit: 100000
+            limit: limit
         });
     }
     return self;
